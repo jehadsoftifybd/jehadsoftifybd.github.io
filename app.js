@@ -674,7 +674,10 @@ if ("IntersectionObserver" in window) {
 
 /* ───────── Reveal on scroll ───────── */
 if ("IntersectionObserver" in window && !reduceMotion) {
-  const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px", threshold: .08 });
+  // threshold 0: a block shows as soon as its top edge is a little way into the screen, however
+  // tall it is. (A ratio threshold never fires for blocks taller than the screen, such as the
+  // full catalog on a phone, which then stayed invisible.)
+  const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0 });
   $$(".reveal").forEach((el) => io.observe(el));
 } else {
   $$(".reveal").forEach((el) => el.classList.add("in"));
