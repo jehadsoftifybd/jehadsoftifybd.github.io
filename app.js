@@ -494,6 +494,52 @@ $$(".cp").forEach((cp) => {
   });
 });
 
+/* ───────── Support menu (dock Coffee button) and BanglaQR modal ───────── */
+const coffeeBtn = $("#coffeeBtn"), coffeeMenu = $("#coffeeMenu"), qrModal = $("#qrModal");
+function placeMenu() {
+  const r = coffeeBtn.getBoundingClientRect(), w = coffeeMenu.offsetWidth;
+  const left = Math.max(12, Math.min(innerWidth - w - 12, r.left + r.width / 2 - w / 2));
+  coffeeMenu.style.left = left + "px";
+  coffeeMenu.style.bottom = innerHeight - r.top + 12 + "px";
+  coffeeMenu.style.setProperty("--ax", r.left + r.width / 2 - left + "px");
+}
+function setMenu(open, focusFirst) {
+  coffeeMenu.hidden = !open;
+  coffeeBtn.classList.toggle("open", open);
+  coffeeBtn.setAttribute("aria-expanded", open);
+  if (open) { placeMenu(); if (focusFirst) $(".cm-item", coffeeMenu).focus(); }
+}
+coffeeBtn.addEventListener("click", (e) => setMenu(coffeeMenu.hidden, e.detail === 0));
+document.addEventListener("click", (e) => {
+  if (!coffeeMenu.hidden && !coffeeMenu.contains(e.target) && !coffeeBtn.contains(e.target)) setMenu(false);
+});
+document.addEventListener("keydown", (e) => {
+  if (coffeeMenu.hidden) return;
+  if (e.key === "Escape") { setMenu(false); coffeeBtn.focus(); }
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    const items = $$(".cm-item", coffeeMenu), i = items.indexOf(document.activeElement);
+    items[(i + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length].focus();
+    e.preventDefault();
+  }
+});
+addEventListener("resize", () => { if (!coffeeMenu.hidden) placeMenu(); });
+$("a.cm-item", coffeeMenu).addEventListener("click", () => setMenu(false));
+
+function openQr() {
+  setMenu(false);
+  if (typeof qrModal.showModal === "function") qrModal.showModal();
+  else qrModal.setAttribute("open", "");
+}
+$$("[data-open-qr]").forEach((b) => b.addEventListener("click", openQr));
+$$("[data-close-qr]", qrModal).forEach((b) => b.addEventListener("click", () => qrModal.close()));
+// a click on the dimmed backdrop closes it too
+qrModal.addEventListener("click", (e) => {
+  if (e.target !== qrModal) return;
+  const r = qrModal.getBoundingClientRect();
+  const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+  if (!inside) qrModal.close();
+});
+
 /* share */
 $("#shareBtn").addEventListener("click", async (e) => {
   e.preventDefault();

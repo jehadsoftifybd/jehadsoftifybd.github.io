@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
 
@@ -33,7 +33,7 @@
     <a class="nd-item" href="#support" data-tip="Support"><span class="nd-ic" style="--g:linear-gradient(145deg,#fda4af,#e11d48)"><svg><use href="#i-heart"/></svg></span><span class="nd-label">Support</span></a>
     <a class="nd-item" href="#faq" data-tip="FAQ"><span class="nd-ic" style="--g:linear-gradient(145deg,#67e8f9,#0891b2)"><svg><use href="#i-help"/></svg></span><span class="nd-label">FAQ</span></a>
     <span class="nd-sep" aria-hidden="true"></span>
-    <a class="nd-item nd-coffee" data-link="coffee" href="#support" target="_blank" rel="noopener" data-tip="Buy me a coffee" aria-label="Buy me a coffee"><span class="nd-ic" style="--g:linear-gradient(145deg,#fff27a,#ffcc00)"><svg><use href="#i-coffee"/></svg></span><span class="nd-label">Coffee</span></a>
+    <button class="nd-item nd-coffee" id="coffeeBtn" type="button" data-tip="Support" aria-haspopup="menu" aria-expanded="false" aria-controls="coffeeMenu"><span class="nd-ic" style="--g:linear-gradient(145deg,#fff27a,#ffcc00)"><svg><use href="#i-coffee"/></svg></span><span class="nd-label">Coffee</span></button>
     <a class="nd-dl" data-link="download" href="#download" data-tip="Download"><svg><use href="#i-download"/></svg><span>Download</span></a>
   </nav>
 </header>
@@ -345,6 +345,7 @@
           <a class="btn btn-lg btn-coffee" data-link="coffee" href="#" target="_blank" rel="noopener">
             <svg class="i"><use href="#i-coffee"/></svg> Buy me a coffee
           </a>
+          <button class="btn btn-lg btn-qr" type="button" data-open-qr><svg class="i"><use href="#i-qr"/></svg> BanglaQR</button>
           <a class="btn btn-lg btn-ghost-dark" href="#share" id="shareBtn"><svg class="i"><use href="#i-share"/></svg> Share CleanDock</a>
         </div>
       </div>
@@ -408,6 +409,39 @@
   </div>
 </footer>
 
+<!-- Support menu, opened from the dock's Coffee button -->
+<div class="coffee-menu" id="coffeeMenu" role="menu" aria-label="Support CleanDock" hidden>
+  <button class="cm-item" type="button" role="menuitem" data-open-qr>
+    <span class="cm-ic cm-qr"><svg><use href="#i-qr"/></svg></span>
+    <span class="cm-txt"><b>BanglaQR</b><small>Scan with bKash, Nagad or a bank app</small></span>
+  </button>
+  <a class="cm-item" role="menuitem" data-link="coffee" href="#support" target="_blank" rel="noopener">
+    <span class="cm-ic cm-bmc"><svg><use href="#i-coffee"/></svg></span>
+    <span class="cm-txt"><b>Buy me a coffee</b><small>buymeacoffee.com</small></span>
+    <svg class="cm-out" aria-hidden="true"><use href="#i-arrow"/></svg>
+  </a>
+</div>
+
+<!-- BanglaQR modal -->
+<dialog class="qr-modal" id="qrModal" aria-labelledby="qrTitle">
+  <button class="qr-close" type="button" aria-label="Close" data-close-qr>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+  </button>
+  <div class="qr-head">
+    <span class="qr-badge"><svg><use href="#i-qr"/></svg></span>
+    <h2 id="qrTitle">Support with BanglaQR</h2>
+    <p>Scan with bKash, Nagad, Rocket or any bank app that supports Bangla QR.</p>
+  </div>
+  <div class="qr-card">
+    <img src="assets/banglaqr.svg?v=1" alt="BanglaQR payment code for supporting CleanDock" width="276" height="276">
+  </div>
+  <p class="qr-tip">On your phone? Save the code, then choose “Scan from gallery” in your payment app.</p>
+  <div class="qr-actions">
+    <a class="btn btn-sm btn-qr" href="assets/banglaqr.png?v=1" download="CleanDock-BanglaQR.png"><svg class="i"><use href="#i-download"/></svg> Save QR</a>
+    <button class="btn btn-sm btn-ghost" type="button" data-close-qr>Close</button>
+  </div>
+</dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ───────────── Icons ───────────── -->
@@ -435,6 +469,7 @@
     <symbol id="i-contrast" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M15 3l6 6-4 1-4 4 1 5-2 2-4-4-5 5M7 13l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z" fill="currentColor"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M6 6h1v1H6zM17 6h1v1h-1zM6 17h1v1H6z" fill="currentColor" stroke="currentColor" stroke-width="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM18 14h3M14 18v3h2" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
     <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4" stroke="currentColor" stroke-width="2"/></symbol>
     <symbol id="i-bug" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="13" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7a3 3 0 0 1 6 0M3 13h4m10 0h4M4 8l3 2m13-2-3 2M4 19l3-2m13 2-3-2M12 11v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -459,7 +494,7 @@
   </defs>
 </svg>
 
-<script src="catalog.js?v=9"></script>
-<script src="app.js?v=9"></script>
+<script src="catalog.js?v=10"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
