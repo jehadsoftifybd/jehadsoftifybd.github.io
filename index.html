@@ -138,7 +138,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
 
@@ -533,7 +533,12 @@
   </div>
 </footer>
 
-<!-- Support menu, opened from the dock's Coffee button -->
+<!-- Coffee tab stuck to the right edge on phones (the dock's Coffee tile is hidden there) -->
+<button class="side-coffee" id="sideCoffee" type="button" aria-label="Support CleanDock" aria-haspopup="menu" aria-expanded="false" aria-controls="coffeeMenu">
+  <svg aria-hidden="true"><use href="#i-coffee"/></svg>
+</button>
+
+<!-- Support menu, opened from the dock's Coffee button or the side tab -->
 <div class="coffee-menu" id="coffeeMenu" role="menu" aria-label="Support CleanDock" hidden>
   <button class="cm-item" type="button" role="menuitem" data-open-qr>
     <span class="cm-ic cm-qr"><svg><use href="#i-qr"/></svg></span>
@@ -617,7 +622,7 @@
   </defs>
 </svg>
 
-<script src="catalog.js?v=12"></script>
-<script src="app.js?v=12"></script>
+<script src="catalog.js?v=13"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>

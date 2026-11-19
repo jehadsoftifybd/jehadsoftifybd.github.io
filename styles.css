@@ -911,3 +911,21 @@ html:has(.qr-modal[open]) { overflow: hidden; }
 .qr-tip { margin-top: 14px; font-size: .8rem; color: var(--muted); line-height: 1.5; }
 .qr-actions { display: flex; justify-content: center; gap: 10px; margin-top: 16px; }
 @media (max-width: 640px) { .qr-modal { padding: 26px 18px 18px; } }
+
+/* ── Coffee tab on the right edge (phones only) ── */
+.side-coffee { display: none; }
+.coffee-menu.side { transform-origin: 100% var(--ay, 50%); animation-name: menuSide; }
+.coffee-menu.side::after { left: auto; bottom: auto; right: -6px; top: var(--ay, 50%); margin: -6px 0 0; border: 0; border-top: 1px solid rgba(255,255,255,.16); border-right: 1px solid rgba(255,255,255,.16); border-radius: 0 3px 0 0; }
+@keyframes menuSide { from { opacity: 0; transform: translateX(8px) scale(.94); } }
+@media (max-width: 640px) {
+  .side-coffee {
+    position: fixed; z-index: 55; right: 0; top: 50%; display: grid; place-items: center;
+    width: calc(46px + env(safe-area-inset-right)); height: 54px; padding-right: env(safe-area-inset-right);
+    border-radius: 16px 0 0 16px; color: #3b2a00; background: linear-gradient(145deg, #fff27a, #ffcc00);
+    box-shadow: -8px 10px 26px -10px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.55), inset 1px 0 0 rgba(255,255,255,.35);
+    transform: translateY(-50%); animation: coffeeNudge 7s ease-in-out 2s infinite; transition: width .2s, filter .2s;
+  }
+  .side-coffee svg { width: 23px; height: 23px; }
+  .side-coffee.open { width: calc(52px + env(safe-area-inset-right)); filter: brightness(1.06); animation: none; }
+  @keyframes coffeeNudge { 0%, 88%, 100% { transform: translateY(-50%); } 92% { transform: translateY(-50%) translateX(-6px); } 96% { transform: translateY(-50%) translateX(-2px); } }
+}

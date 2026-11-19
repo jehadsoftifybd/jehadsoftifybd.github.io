@@ -495,27 +495,41 @@ $$(".cp").forEach((cp) => {
 });
 
 /* ───────── Support menu (dock Coffee button) and BanglaQR modal ───────── */
-const coffeeBtn = $("#coffeeBtn"), coffeeMenu = $("#coffeeMenu"), qrModal = $("#qrModal");
+// Two buttons open the same menu: the dock's Coffee tile (desktop) and the tab
+// stuck to the right edge (phones). The menu opens above the first, beside the second.
+const coffeeBtn = $("#coffeeBtn"), sideCoffee = $("#sideCoffee"), coffeeMenu = $("#coffeeMenu"), qrModal = $("#qrModal");
+const coffeeAnchors = [coffeeBtn, sideCoffee];
+let menuAnchor = coffeeBtn;
 function placeMenu() {
-  const r = coffeeBtn.getBoundingClientRect(), w = coffeeMenu.offsetWidth;
-  const left = Math.max(12, Math.min(innerWidth - w - 12, r.left + r.width / 2 - w / 2));
-  coffeeMenu.style.left = left + "px";
-  coffeeMenu.style.bottom = innerHeight - r.top + 12 + "px";
-  coffeeMenu.style.setProperty("--ax", r.left + r.width / 2 - left + "px");
+  const r = menuAnchor.getBoundingClientRect(), w = coffeeMenu.offsetWidth, h = coffeeMenu.offsetHeight;
+  const side = menuAnchor === sideCoffee;
+  coffeeMenu.classList.toggle("side", side);
+  if (side) {
+    const top = Math.max(12, Math.min(innerHeight - h - 12, r.top + r.height / 2 - h / 2));
+    Object.assign(coffeeMenu.style, { left: Math.max(12, r.left - w - 14) + "px", top: top + "px", bottom: "" });
+    coffeeMenu.style.setProperty("--ay", r.top + r.height / 2 - top + "px");
+  } else {
+    const left = Math.max(12, Math.min(innerWidth - w - 12, r.left + r.width / 2 - w / 2));
+    Object.assign(coffeeMenu.style, { left: left + "px", top: "", bottom: innerHeight - r.top + 12 + "px" });
+    coffeeMenu.style.setProperty("--ax", r.left + r.width / 2 - left + "px");
+  }
 }
-function setMenu(open, focusFirst) {
+function setMenu(open, focusFirst, anchor = menuAnchor) {
+  menuAnchor = anchor;
   coffeeMenu.hidden = !open;
-  coffeeBtn.classList.toggle("open", open);
-  coffeeBtn.setAttribute("aria-expanded", open);
+  coffeeAnchors.forEach((b) => { b.classList.toggle("open", open && b === anchor); b.setAttribute("aria-expanded", open && b === anchor); });
   if (open) { placeMenu(); if (focusFirst) $(".cm-item", coffeeMenu).focus(); }
 }
-coffeeBtn.addEventListener("click", (e) => setMenu(coffeeMenu.hidden, e.detail === 0));
+coffeeAnchors.forEach((b) => b.addEventListener("click", (e) => {
+  const reopenHere = coffeeMenu.hidden || menuAnchor !== b;
+  setMenu(reopenHere, e.detail === 0, b);
+}));
 document.addEventListener("click", (e) => {
-  if (!coffeeMenu.hidden && !coffeeMenu.contains(e.target) && !coffeeBtn.contains(e.target)) setMenu(false);
+  if (!coffeeMenu.hidden && !coffeeMenu.contains(e.target) && !coffeeAnchors.some((b) => b.contains(e.target))) setMenu(false);
 });
 document.addEventListener("keydown", (e) => {
   if (coffeeMenu.hidden) return;
-  if (e.key === "Escape") { setMenu(false); coffeeBtn.focus(); }
+  if (e.key === "Escape") { setMenu(false); menuAnchor.focus(); }
   if (e.key === "ArrowDown" || e.key === "ArrowUp") {
     const items = $$(".cm-item", coffeeMenu), i = items.indexOf(document.activeElement);
     items[(i + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length].focus();
