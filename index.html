@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CleanDock — A smart dock for Windows</title>
+  <meta name="description" content="CleanDock replaces the Windows taskbar with one Liquid Glass dock that holds your apps and 115 live widgets, plus 26 widgets for the desktop. Free for Windows 11 and 10.">
+  <meta name="theme-color" content="#070b14">
+  <meta property="og:title" content="CleanDock — A smart dock for Windows">
+  <meta property="og:description" content="Your apps and live widgets in one beautiful bar. 115 dock widgets, 26 desktop widgets, free.">
+  <meta property="og:image" content="assets/icon.png">
+  <link rel="icon" type="image/png" href="assets/icon-128.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=9">
+</head>
+<body>
+
+<!-- ───────────── Navigation ───────────── -->
+<header class="nav" id="top">
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top" data-tip="Back to top"><svg><use href="#i-up"/></svg></button>
+  <nav class="nav-dock" id="navDock" aria-label="Main">
+    <a class="nd-brand" href="#top" aria-label="CleanDock home" data-tip="Home">
+      <img class="nd-ic" src="assets/icon-128.png" alt="" width="24" height="24">
+      <span class="nd-name">CleanDock</span>
+    </a>
+    <span class="nd-sep" aria-hidden="true"></span>
+    <a class="nd-item" href="#dock-widgets" data-tip="Dock widgets"><span class="nd-ic" style="--g:linear-gradient(145deg,#60a5fa,#2563eb)"><svg><use href="#i-dock"/></svg></span><span class="nd-label">Dock</span></a>
+    <a class="nd-item" href="#desktop-widgets" data-tip="Desktop widgets"><span class="nd-ic" style="--g:linear-gradient(145deg,#c4b5fd,#7c3aed)"><svg><use href="#i-grid"/></svg></span><span class="nd-label">Desktop</span></a>
+    <a class="nd-item" href="#apps" data-tip="Built-in apps"><span class="nd-ic" style="--g:linear-gradient(145deg,#4ade80,#16a34a)"><svg><use href="#i-apps"/></svg></span><span class="nd-label">Apps</span></a>
+    <a class="nd-item" href="#features" data-tip="Benefits"><span class="nd-ic" style="--g:linear-gradient(145deg,#fcd34d,#f59e0b)"><svg><use href="#i-spark"/></svg></span><span class="nd-label">Benefits</span></a>
+    <a class="nd-item" href="#support" data-tip="Support"><span class="nd-ic" style="--g:linear-gradient(145deg,#fda4af,#e11d48)"><svg><use href="#i-heart"/></svg></span><span class="nd-label">Support</span></a>
+    <a class="nd-item" href="#faq" data-tip="FAQ"><span class="nd-ic" style="--g:linear-gradient(145deg,#67e8f9,#0891b2)"><svg><use href="#i-help"/></svg></span><span class="nd-label">FAQ</span></a>
+    <span class="nd-sep" aria-hidden="true"></span>
+    <a class="nd-item nd-coffee" data-link="coffee" href="#support" target="_blank" rel="noopener" data-tip="Buy me a coffee" aria-label="Buy me a coffee"><span class="nd-ic" style="--g:linear-gradient(145deg,#fff27a,#ffcc00)"><svg><use href="#i-coffee"/></svg></span><span class="nd-label">Coffee</span></a>
+    <a class="nd-dl" data-link="download" href="#download" data-tip="Download"><svg><use href="#i-download"/></svg><span>Download</span></a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ───────────── Hero ───────────── -->
+<section class="hero">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="wrap hero-copy reveal">
+    <a class="pill" href="#features"><span class="pill-dot"></span><span>v<span data-version>0.8.8</span> · For Windows 11 &amp; 10</span></a>
+    <h1>Your taskbar, rebuilt as a <span class="grad">smart dock</span>.</h1>
+    <p class="lead">CleanDock puts your apps and <b data-count="dock">115</b> live widgets in one Liquid Glass bar — and <b>26</b> more widgets right on your desktop. Light, beautiful, and fully reversible.</p>
+    <div class="hero-cta">
+      <a class="btn btn-lg btn-primary" data-link="download" href="#download">
+        <svg class="i"><use href="#i-download"/></svg> Download for Windows
+      </a>
+      <a class="btn btn-lg btn-ghost" href="#dock-widgets">Explore the widgets <svg class="i"><use href="#i-arrow"/></svg></a>
+    </div>
+    <p class="fine">Free · .exe and .msi installers · Quitting brings the taskbar back</p>
+  </div>
+
+  <div class="wrap">
+    <div class="stage-wrap reveal" data-stage="1200x660">
+      <div class="stage screen" id="heroStage">
+        <div class="wall" aria-hidden="true"></div>
+
+        <!-- a window behind the widgets -->
+        <div class="mock-win">
+          <div class="mw-bar"><i></i><i></i><i></i><span>CleanDock Notes</span></div>
+          <div class="mw-body">
+            <div class="mw-side"><b>Folders</b><span class="on">All notes</span><span>Today</span><span>Work</span><span>Personal</span></div>
+            <div class="mw-board">
+              <div class="mw-col"><em>Not started</em><div class="mw-card"><b>Plan launch post</b><small>Due Fri</small></div><div class="mw-card"><b>Icon variants</b><small>Design</small></div></div>
+              <div class="mw-col"><em>In progress</em><div class="mw-card hot"><b>Website for CleanDock</b><small>Today · 3/5</small><span class="mw-prog"><i style="width:60%"></i></span></div></div>
+              <div class="mw-col"><em>Completed</em><div class="mw-card done"><b>v0.8.8 release</b><small>Done</small></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- desktop widgets on the hero desktop -->
+        <div class="hero-desk">
+          <div class="dw dw-s light" data-dw="analog"></div>
+          <div class="dw dw-s dark" data-dw="batteryRing"></div>
+          <div class="dw dw-w dark" data-dw="weatherMini"></div>
+          <div class="dw dw-s sticky-y" data-dw="stickySmall"></div>
+          <div class="dw dw-s light" data-dw="wifi"></div>
+        </div>
+
+        <!-- the dock -->
+        <div class="dock skin-glass pos-bottom" id="heroDock"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Numbers ───────────── -->
+<section class="numbers">
+  <div class="wrap nums reveal">
+    <div><b data-count="dock">115</b><span>Dock widgets</span></div>
+    <div><b>26</b><span>Desktop widgets</span></div>
+    <div><b>13</b><span>Categories</span></div>
+    <div><b>4</b><span>Styles</span></div>
+    <div><b>4</b><span>Screen edges</span></div>
+  </div>
+</section>
+
+<!-- ───────────── Dock widgets ───────────── -->
+<section class="sec" id="dock-widgets">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg class="i"><use href="#i-dock"/></svg> Dock widgets</span>
+      <h2>Live information, one glance away.</h2>
+      <p>Every tile in the dock is a small live app: system load, weather, music, focus timers, revenue, AI limits and more. Click a tile to open its card; pick new ones from the widget picker.</p>
+    </div>
+
+    <div class="tile-grid" id="tileGrid"></div>
+
+    <div class="cat-browser reveal" id="catalog">
+      <div class="cb-head">
+        <div>
+          <h3>The full catalog</h3>
+          <p class="muted"><b data-count="dock">115</b> widgets in 13 categories. Badges show where each one gets its data.</p>
+        </div>
+        <label class="search">
+          <svg class="i"><use href="#i-search"/></svg>
+          <input id="cbSearch" type="search" placeholder="Search widgets…" autocomplete="off">
+        </label>
+      </div>
+      <div class="legend">
+        <span class="badge ok">Local</span> runs on this PC
+        <span class="badge info">Internet</span> public data, no account
+        <span class="badge warn">API key</span> your own key
+        <span class="badge vio">Sign-in</span> connects an account
+        <span class="badge prev">Preview</span> designed, connection coming
+      </div>
+      <div class="chips" id="cbTabs" role="tablist" aria-label="Widget categories"></div>
+      <div class="cb-list" id="cbList"></div>
+      <p class="cb-empty muted" id="cbEmpty" hidden>No widget matches that search.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Desktop widgets ───────────── -->
+<section class="sec sec-desk" id="desktop-widgets">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg class="i"><use href="#i-grid"/></svg> Desktop widgets</span>
+      <h2>Your desktop, finally useful.</h2>
+      <p>Place big, friendly cards anywhere on the desktop: clocks, weather, a calculator, sticky notes, timers, recorders. Each one has a light and a dark style and scales from 60% to 200%.</p>
+    </div>
+
+    <div class="desk-how reveal">
+      <div><svg class="i"><use href="#i-move"/></svg><b>Drag to place</b><span>Cards snap to a grid; drop one on another and they swap.</span></div>
+      <div><svg class="i"><use href="#i-resize"/></svg><b>Resize freely</b><span>Pull the corner — the whole design scales with it.</span></div>
+      <div><svg class="i"><use href="#i-contrast"/></svg><b>Light or dark</b><span>Right-click a card for its style, size and options.</span></div>
+      <div><svg class="i"><use href="#i-pin"/></svg><b>Keep on top</b><span>Pin a card above every window when you need it.</span></div>
+    </div>
+
+    <div class="bento-zoom">
+      <div class="bento" id="bento">
+        <div class="dw b-34 dark" data-dw="weatherBoard"></div>
+        <div class="dw b-12 light" data-dw="analog"></div>
+        <div class="dw b-12 light" data-dw="wifi"></div>
+        <div class="dw b-12 dark" data-dw="batteryRing"></div>
+        <div class="dw b-12 light" data-dw="world"></div>
+        <div class="dw b-12 dark" data-dw="habit"></div>
+        <div class="dw b-12 dark" data-dw="charging"></div>
+        <div class="dw b-33 dark" data-dw="flipBig"></div>
+        <div class="dw b-33 dark" data-dw="timer"></div>
+        <div class="dw b-24 sticky-stack" data-dw="sticky"></div>
+        <div class="dw b-24 dark" data-dw="activity"></div>
+        <div class="dw b-24 dark" data-dw="calcPad"></div>
+        <div class="dw b-22 light" data-dw="music"></div>
+        <div class="dw b-12 dark" data-dw="recorder"></div>
+        <div class="dw b-12 light" data-dw="camera"></div>
+        <div class="dw b-22 light" data-dw="run"></div>
+      </div>
+    </div>
+
+    <div class="desk-all reveal">
+      <h3>All 26 desktop widgets</h3>
+      <div class="desk-list" id="deskList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Built-in apps ───────────── -->
+<section class="sec" id="apps">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg class="i"><use href="#i-apps"/></svg> More than a dock</span>
+      <h2>Everyday tools, in the same glass.</h2>
+      <p>CleanDock ships with its own Start menu, file browser, notes board and screenshot tool — all drawn in the dock's Liquid Glass, all one click from the bar.</p>
+    </div>
+
+    <div class="apps">
+      <article class="app-card big reveal">
+        <div class="app-art art-start" aria-hidden="true">
+          <div class="as-search"><svg class="i"><use href="#i-search"/></svg> Type to search apps, files and settings</div>
+          <div class="as-widgets"><i></i><i></i><i></i></div>
+          <div class="as-apps"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="app-txt">
+          <h3>CleanDock Start</h3>
+          <p>A full-screen Start menu with search on top, a row of your favourite widgets, pinned apps, recent files and every app from A to Z. Opens from the Start button, the Windows key or Ctrl+Esc.</p>
+        </div>
+      </article>
+      <article class="app-card reveal">
+        <div class="app-art art-files" aria-hidden="true">
+          <div class="af-side"><i></i><i></i><i></i><i></i></div>
+          <div class="af-main"><div class="af-crumb">This PC › Projects › CleanDock</div><div class="af-grid"><i class="f"></i><i class="f"></i><i class="img"></i><i class="doc"></i><i class="f"></i><i class="img"></i></div></div>
+        </div>
+        <div class="app-txt">
+          <h3>CleanDock Files</h3>
+          <p>Places and drives, a breadcrumb you can type into (Ctrl+L), grid or list views with previews. Copy, paste and delete are done by Windows itself, so everything can be undone.</p>
+        </div>
+      </article>
+      <article class="app-card reveal">
+        <div class="app-art art-notes" aria-hidden="true">
+          <div class="an-col"><i></i><i></i></div><div class="an-col"><i class="hot"></i></div><div class="an-col"><i class="ok"></i><i class="ok"></i></div>
+        </div>
+        <div class="app-txt">
+          <h3>CleanDock Notes</h3>
+          <p>Notes as task cards: a board per status, due dates, reminders, priorities, labels and checklists. Saved as you type, and the Notes widgets show what's due today.</p>
+        </div>
+      </article>
+      <article class="app-card reveal">
+        <div class="app-art art-snap" aria-hidden="true">
+          <div class="sn-area"><span class="sn-arrow"></span><span class="sn-box"></span></div>
+          <div class="sn-tools"><i></i><i></i><i></i><i class="on"></i><i></i><i></i></div>
+        </div>
+        <div class="app-txt">
+          <h3>Screenshot</h3>
+          <p>Freeze the screen, drag an area, then draw on it — pen, arrow, box, highlighter, text and blur. Ctrl+C copies, Ctrl+S saves, Ctrl+Z undoes.</p>
+        </div>
+      </article>
+      <article class="app-card reveal">
+        <div class="app-art art-peek" aria-hidden="true">
+          <div class="pk-card"><b></b><i></i></div><div class="pk-card"><b></b><i></i></div><div class="pk-card"><b></b><i></i></div>
+        </div>
+        <div class="app-txt">
+          <h3>Window previews</h3>
+          <p>Rest the pointer on an app in the dock to see a live picture of each of its windows. Click one to bring it forward, or close it right there.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Benefits ───────────── -->
+<section class="sec sec-tint" id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg class="i"><use href="#i-spark"/></svg> Benefits</span>
+      <h2>Why people switch to CleanDock.</h2>
+      <p>One bar instead of a taskbar, a tray and a dozen open apps — and nothing you can't undo.</p>
+    </div>
+    <div class="feat-grid">
+      <article class="feat reveal"><span class="fi c-blue"><svg class="i"><use href="#i-glass"/></svg></span><h3>Liquid Glass design</h3><p>A real Windows blur behind the dock and every pop-up, clipped to smooth rounded corners. Or pick a solid style: Slate, Paper or Midnight.</p></article>
+      <article class="feat reveal"><span class="fi c-green"><svg class="i"><use href="#i-eye"/></svg></span><h3>Everything at a glance</h3><p>CPU, battery, weather, music, your next task and today's revenue — live in the bar, without opening a single app.</p></article>
+      <article class="feat reveal"><span class="fi c-amber"><svg class="i"><use href="#i-shield"/></svg></span><h3>Safe and reversible</h3><p>No Windows files are changed. The taskbar is set to auto-hide while the dock runs and comes back the moment you quit — even after a crash, with <code>--restore</code>.</p></article>
+      <article class="feat reveal"><span class="fi c-violet"><svg class="i"><use href="#i-lock"/></svg></span><h3>Private by design</h3><p>Account keys are encrypted with Windows data protection and sent only to the service they belong to. Most widgets never leave your PC.</p></article>
+      <article class="feat reveal"><span class="fi c-cyan"><svg class="i"><use href="#i-bolt"/></svg></span><h3>Light and fast</h3><p>Built with Rust and Tauri, so it starts with Windows in a moment and stays out of your way.</p></article>
+      <article class="feat reveal"><span class="fi c-pink"><svg class="i"><use href="#i-edges"/></svg></span><h3>Any edge you like</h3><p>Bottom, top, left or right. Maximized windows stop above the dock, and on a side edge the tiles stack in a column.</p></article>
+      <article class="feat reveal"><span class="fi c-blue"><svg class="i"><use href="#i-palette"/></svg></span><h3>Your accent colour</h3><p>Selected buttons, rings and highlights follow the accent colour you chose in Windows Personalisation.</p></article>
+      <article class="feat reveal"><span class="fi c-green"><svg class="i"><use href="#i-term"/></svg></span><h3>Keyboard and command line</h3><p>Windows key opens Start, Win+E opens Files, and <code>cleandock.exe</code> takes flags to move the dock, open settings or quit.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Make it yours ───────────── -->
+<section class="sec" id="customize">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg class="i"><use href="#i-palette"/></svg> Make it yours</span>
+      <h2>Four styles. Four edges. Try them.</h2>
+      <p>Switch the style and the edge below — it's the same dock you get on your PC.</p>
+    </div>
+
+    <div class="custom reveal">
+      <div class="custom-ctl">
+        <div class="seg" role="radiogroup" aria-label="Dock style" id="skinSeg">
+          <button role="radio" aria-checked="true" data-skin="glass"><i class="sw sw-glass"></i>Glass</button>
+          <button role="radio" aria-checked="false" data-skin="slate"><i class="sw sw-slate"></i>Slate</button>
+          <button role="radio" aria-checked="false" data-skin="paper"><i class="sw sw-paper"></i>Paper</button>
+          <button role="radio" aria-checked="false" data-skin="midnight"><i class="sw sw-mid"></i>Midnight</button>
+        </div>
+        <div class="seg" role="radiogroup" aria-label="Dock edge" id="posSeg">
+          <button role="radio" aria-checked="true" data-pos="bottom">Bottom</button>
+          <button role="radio" aria-checked="false" data-pos="top">Top</button>
+          <button role="radio" aria-checked="false" data-pos="left">Left</button>
+          <button role="radio" aria-checked="false" data-pos="right">Right</button>
+        </div>
+      </div>
+      <div class="stage-wrap" data-stage="1200x600">
+        <div class="stage screen" id="customStage">
+          <div class="wall wall-2" aria-hidden="true"></div>
+          <div class="dock skin-glass pos-bottom" id="customDock"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Safe with the taskbar ───────────── -->
+<section class="sec sec-tint" id="how">
+  <div class="wrap two">
+    <div class="reveal">
+      <span class="eyebrow"><svg class="i"><use href="#i-shield"/></svg> How it works</span>
+      <h2>Takes the taskbar's place. Gives it back.</h2>
+      <ol class="steps">
+        <li><b>Install and run.</b> CleanDock sets the taskbar to auto-hide, hides it, and registers the dock as an app bar so maximized windows stop above it.</li>
+        <li><b>Use your PC.</b> The Start button, Windows key and Win+E open CleanDock's own Start and Files; your usual shortcuts keep working.</li>
+        <li><b>Quit any time.</b> The original taskbar setting is put back. After a crash, <code>cleandock.exe --restore</code> repairs it.</li>
+      </ol>
+    </div>
+    <div class="term reveal" aria-label="Command line examples">
+      <div class="term-bar"><i></i><i></i><i></i><span>PowerShell</span></div>
+<pre><code><span class="c"># move the running dock to another edge</span>
+<span class="p">&gt;</span> cleandock.exe --position=left
+<span class="c"># open Settings or the Start menu</span>
+<span class="p">&gt;</span> cleandock.exe --settings
+<span class="p">&gt;</span> cleandock.exe --start
+<span class="c"># open CleanDock Files in a folder</span>
+<span class="p">&gt;</span> cleandock.exe --files=D:\Projects
+<span class="c"># close the dock, bring the taskbar back</span>
+<span class="p">&gt;</span> cleandock.exe --quit
+<span class="p">&gt;</span> cleandock.exe --restore</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Support ───────────── -->
+<section class="sec" id="support">
+  <div class="wrap">
+    <div class="support reveal">
+      <div class="support-art" aria-hidden="true">
+        <div class="cup">
+          <span class="steam"><i></i><i></i><i></i></span>
+          <svg viewBox="0 0 120 110"><path d="M14 30h76l-8 62a12 12 0 0 1-12 10H34a12 12 0 0 1-12-10z" fill="#fff"/><path d="M18 46h68l-2 16H20z" fill="#ffdd00"/><path d="M90 40h8a14 14 0 0 1 0 28h-11" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><rect x="8" y="22" width="88" height="12" rx="6" fill="#fff"/></svg>
+        </div>
+      </div>
+      <div class="support-txt">
+        <span class="eyebrow light"><svg class="i"><use href="#i-heart"/></svg> Support CleanDock</span>
+        <h2>Enjoying CleanDock? Buy me a coffee.</h2>
+        <p>CleanDock is free, with no ads and no tracking. If it makes your desktop a little nicer every day, a coffee helps keep the updates and new widgets coming.</p>
+        <div class="support-cta">
+          <a class="btn btn-lg btn-coffee" data-link="coffee" href="#" target="_blank" rel="noopener">
+            <svg class="i"><use href="#i-coffee"/></svg> Buy me a coffee
+          </a>
+          <a class="btn btn-lg btn-ghost-dark" href="#share" id="shareBtn"><svg class="i"><use href="#i-share"/></svg> Share CleanDock</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-grid">
+      <a class="help reveal" data-link="issues" href="#" target="_blank" rel="noopener"><span class="fi c-pink"><svg class="i"><use href="#i-bug"/></svg></span><b>Report a bug</b><span>Something not working? Run <code>cleandock.exe --diagnose</code> and attach the report — it has counts, never names or titles.</span></a>
+      <a class="help reveal" data-link="ideas" href="#" target="_blank" rel="noopener"><span class="fi c-amber"><svg class="i"><use href="#i-bulb"/></svg></span><b>Suggest a widget</b><span>Tell us which service or tile you'd like to see in the dock next.</span></a>
+      <a class="help reveal" data-link="email" href="#" target="_blank" rel="noopener"><span class="fi c-blue"><svg class="i"><use href="#i-mail"/></svg></span><b>Get in touch</b><span>Questions, feedback or just a hello — we read every message.</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── FAQ ───────────── -->
+<section class="sec sec-tint" id="faq">
+  <div class="wrap narrow">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg class="i"><use href="#i-help"/></svg> FAQ</span>
+      <h2>Questions, answered.</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal"><summary>Is CleanDock free?</summary><p>Yes. Download it, use every widget, no account needed. If you'd like to support it, you can buy me a coffee.</p></details>
+      <details class="reveal"><summary>Does it change Windows files?</summary><p>No. While the dock is open it switches the taskbar to auto-hide and hides its window. Quitting restores both. The original setting is kept in <code>%LOCALAPPDATA%\CleanDock\taskbar.state</code> so <code>--restore</code> can put it back even after a crash.</p></details>
+      <details class="reveal"><summary>Which Windows versions are supported?</summary><p>Windows 11 and Windows 10, 64-bit. Download the .exe installer, or the .msi if you deploy with policies.</p></details>
+      <details class="reveal"><summary>How do I add or remove widgets?</summary><p>Run CleanDock again while it's open, or right-click the dock, to open the widget picker. "Ready to use" shows everything that works right away; account widgets show "Click to connect" until you paste a key.</p></details>
+      <details class="reveal"><summary>Where are my account keys stored?</summary><p>Only on your PC, encrypted with Windows data protection (DPAPI). Each key is sent only to the service it belongs to.</p></details>
+      <details class="reveal"><summary>What are "Preview" widgets?</summary><p>They're finished designs — like Claude, ChatGPT, Gemini and Cursor usage — that still show sample numbers while their connection is being built. They're marked in the picker.</p></details>
+      <details class="reveal"><summary>Does it start with Windows?</summary><p>Yes, an installed copy always starts with Windows. You can still switch it off in Windows Settings → Apps → Startup, and CleanDock respects that.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Download ───────────── -->
+<section class="sec" id="download">
+  <div class="wrap">
+    <div class="final reveal">
+      <img src="assets/icon.png" alt="" width="96" height="96">
+      <h2>Give your desktop a clean dock.</h2>
+      <p>Version <span data-version>0.8.8</span> · Windows 11 &amp; 10 · 64-bit</p>
+      <div class="hero-cta">
+        <a class="btn btn-lg btn-primary" data-link="download" href="#"><svg class="i"><use href="#i-download"/></svg> Download installer (.exe)</a>
+        <a class="btn btn-lg btn-ghost" data-link="downloadMsi" href="#">Download .msi</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="brand" href="#top"><img src="assets/icon-128.png" alt="" width="28" height="28"><span>CleanDock</span></a>
+    <nav aria-label="Footer">
+      <a href="#dock-widgets">Dock widgets</a>
+      <a href="#desktop-widgets">Desktop widgets</a>
+      <a href="#features">Benefits</a>
+      <a href="#support">Support</a>
+      <a data-link="coffee" href="#" target="_blank" rel="noopener">Buy me a coffee</a>
+    </nav>
+    <p class="muted">© <span id="year">2026</span> CleanDock. Made for Windows.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ───────────── Icons ───────────── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V6m0 0-6 6m6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10h1.5a2.5 2.5 0 0 1 0 5H17M7 2.5c0 1 1 1 1 2s-1 1-1 2M11 2.5c0 1 1 1 1 2s-1 1-1 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-dock" viewBox="0 0 24 24"><rect x="2" y="14" width="20" height="7" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="6" y="4" width="12" height="6" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="18" height="8" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-apps" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5" fill="currentColor"/><circle cx="12" cy="6" r="2.5" fill="currentColor"/><circle cx="18" cy="6" r="2.5" fill="currentColor"/><circle cx="6" cy="12" r="2.5" fill="currentColor"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><circle cx="18" cy="12" r="2.5" fill="currentColor"/><circle cx="6" cy="18" r="2.5" fill="currentColor"/><circle cx="12" cy="18" r="2.5" fill="currentColor"/><circle cx="18" cy="18" r="2.5" fill="currentColor"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2l2.2 6.3L20.5 10l-6.3 2.2L12 18.5l-2.2-6.3L3.5 10l6.3-1.7z M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" fill="currentColor"/></symbol>
+    <symbol id="i-glass" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 15 15 7M11 16l5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m8.5 12 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor"/></symbol>
+    <symbol id="i-edges" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 17h10M7 7v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.2 0 1.8-.8 1.8-1.7 0-1.2-1-1.5-1-2.6 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="7.5" cy="11" r="1.4" fill="currentColor"/><circle cx="10.5" cy="7.5" r="1.4" fill="currentColor"/><circle cx="15" cy="8" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-term" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m7 9 3 3-3 3M12 15h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M12 2 9 5m3-3 3 3M12 22l-3-3m3 3 3-3M2 12l3-3m-3 3 3 3M22 12l-3-3m3 3-3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-resize" viewBox="0 0 24 24"><path d="M21 14v7h-7M21 21l-8-8M3 10V3h7M3 3l8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-contrast" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M15 3l6 6-4 1-4 4 1 5-2 2-4-4-5 5M7 13l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z" fill="currentColor"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-bug" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="13" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7a3 3 0 0 1 6 0M3 13h4m10 0h4M4 8l3 2m13-2-3 2M4 19l3-2m13 2-3-2M12 11v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="19.3" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-bt" viewBox="0 0 24 24"><path d="m7 7 10 10-5 4V3l5 4L7 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4" height="15" rx="1.3" fill="currentColor"/><rect x="14" y="4.5" width="4" height="15" rx="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M4 5v14l10-7zM14 5v14l8-7z" fill="currentColor"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M20 5v14l-10-7zM10 5v14l-8-7z" fill="currentColor"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 19a5 5 0 0 1-.6-10A6.5 6.5 0 0 1 19 9.5 4.8 4.8 0 0 1 18 19z" fill="currentColor"/></symbol>
+    <symbol id="i-rain" viewBox="0 0 24 24"><path d="M7 15a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 18 6.5 4.3 4.3 0 0 1 17.5 15z" fill="currentColor"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-pcloud" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4" fill="#fbbf24"/><path d="M8 20a4.5 4.5 0 0 1-.5-9A5.8 5.8 0 0 1 18.6 11 4.5 4.5 0 0 1 18 20z" fill="currentColor"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h2.5l1.5-2h6l1.5 2H19a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-run" viewBox="0 0 24 24"><circle cx="15" cy="4" r="2" fill="currentColor"/><path d="M6 21l3-6 3 2v4M9 15l2-6 4 3 3 1M11 9l-3 1-2 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-start" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor" opacity=".75"/><rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor" opacity=".75"/><rect x="13" y="13" width="8" height="8" rx="2" fill="currentColor" opacity=".55"/></symbol>
+  </defs>
+</svg>
+
+<script src="catalog.js?v=9"></script>
+<script src="app.js?v=9"></script>
+</body>
+</html>
