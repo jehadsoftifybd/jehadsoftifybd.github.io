@@ -1,0 +1,13 @@
+{
+  "name": "CleanDock",
+  "short_name": "CleanDock",
+  "description": "A smart dock for Windows 11 and 10: your apps and live widgets in one Liquid Glass bar.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
+  "icons": [
+    { "src": "/assets/icon-128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/assets/icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

@@ -3,17 +3,142 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>CleanDock — A smart dock for Windows</title>
-  <meta name="description" content="CleanDock replaces the Windows taskbar with one Liquid Glass dock that holds your apps and 115 live widgets, plus 26 widgets for the desktop. Free for Windows 11 and 10.">
+  <title>CleanDock — Free Dock & Widgets for Windows 11 and 10</title>
+  <meta name="description" content="Replace the Windows 11/10 taskbar with CleanDock: one Liquid Glass dock for your apps and 115 live widgets, plus 26 desktop widgets. Free and fully reversible.">
+  <link rel="canonical" href="https://cleandock.site/">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="theme-color" content="#070b14">
-  <meta property="og:title" content="CleanDock — A smart dock for Windows">
-  <meta property="og:description" content="Your apps and live widgets in one beautiful bar. 115 dock widgets, 26 desktop widgets, free.">
-  <meta property="og:image" content="assets/icon.png">
-  <link rel="icon" type="image/png" href="assets/icon-128.png">
+  <meta name="color-scheme" content="dark">
+  <meta name="application-name" content="CleanDock">
+
+  <!-- social sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CleanDock">
+  <meta property="og:url" content="https://cleandock.site/">
+  <meta property="og:title" content="CleanDock — Free Dock & Widgets for Windows 11 and 10">
+  <meta property="og:description" content="Your apps and 115 live widgets in one Liquid Glass bar, plus 26 desktop widgets. A free taskbar replacement for Windows 11 and 10.">
+  <meta property="og:image" content="https://cleandock.site/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CleanDock: a Liquid Glass dock with apps and live widgets for Windows 11 and 10">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CleanDock — Free Dock & Widgets for Windows 11 and 10">
+  <meta name="twitter:description" content="Your apps and 115 live widgets in one Liquid Glass bar, plus 26 desktop widgets. A free taskbar replacement for Windows 11 and 10.">
+  <meta name="twitter:image" content="https://cleandock.site/assets/og-image.png">
+
+  <!-- icons -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="128x128" href="/assets/icon-128.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://cleandock.site/#website",
+        "url": "https://cleandock.site/",
+        "name": "CleanDock",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://cleandock.site/#app",
+        "name": "CleanDock",
+        "url": "https://cleandock.site/",
+        "description": "Replace the Windows 11/10 taskbar with CleanDock: one Liquid Glass dock for your apps and 115 live widgets, plus 26 desktop widgets. Free and fully reversible.",
+        "image": "https://cleandock.site/assets/og-image.png",
+        "screenshot": "https://cleandock.site/assets/og-image.png",
+        "operatingSystem": "Windows 11, Windows 10",
+        "applicationCategory": "UtilitiesApplication",
+        "applicationSubCategory": "Taskbar replacement",
+        "downloadUrl": "https://github.com/jehadsoftifybd/CleanDock-releases/releases/latest/download/CleanDock-Setup.exe",
+        "installUrl": "https://github.com/jehadsoftifybd/CleanDock-releases/releases/latest/download/CleanDock-Setup.exe",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Replaces the Windows taskbar with a Liquid Glass dock on any screen edge",
+          "115 live dock widgets in 13 categories",
+          "26 desktop widgets with light and dark styles",
+          "Own Start menu, file browser, notes board and screenshot tool",
+          "Restores the original taskbar when you quit"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://cleandock.site/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is CleanDock free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Download it, use every widget, no account needed. If you'd like to support it, you can buy me a coffee."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it change Windows files?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. While the dock is open it switches the taskbar to auto-hide and hides its window. Quitting restores both. The original setting is kept in %LOCALAPPDATA%\\CleanDock\\taskbar.state so --restore can put it back even after a crash."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which Windows versions are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Windows 11 and Windows 10, 64-bit. Download the .exe installer, or the .msi if you deploy with policies."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I add or remove widgets?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Run CleanDock again while it's open, or right-click the dock, to open the widget picker. \"Ready to use\" shows everything that works right away; account widgets show \"Click to connect\" until you paste a key."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where are my account keys stored?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Only on your PC, encrypted with Windows data protection (DPAPI). Each key is sent only to the service it belongs to."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are \"Preview\" widgets?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "They're finished designs — like Claude, ChatGPT, Gemini and Cursor usage — that still show sample numbers while their connection is being built. They're marked in the picker."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it start with Windows?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, an installed copy always starts with Windows. You can still switch it off in Windows Settings → Apps → Startup, and CleanDock respects that."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
 
@@ -45,7 +170,7 @@
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="wrap hero-copy reveal">
     <a class="pill" href="#features"><span class="pill-dot"></span><span>v<span data-version>0.8.8</span> · For Windows 11 &amp; 10</span></a>
-    <h1>Your taskbar, rebuilt as a <span class="grad">smart dock</span>.</h1>
+    <h1>Your Windows taskbar, rebuilt as a <span class="grad">smart dock</span>.</h1>
     <p class="lead">CleanDock puts your apps and <b data-count="dock">115</b> live widgets in one Liquid Glass bar — and <b>26</b> more widgets right on your desktop. Light, beautiful, and fully reversible.</p>
     <div class="hero-cta">
       <a class="btn btn-lg btn-primary" data-link="download" href="#download">
@@ -432,7 +557,7 @@
     <p>Scan with bKash, Nagad, Rocket or any bank app that supports Bangla QR.</p>
   </div>
   <div class="qr-card">
-    <img src="assets/banglaqr.svg?v=1" alt="BanglaQR payment code for supporting CleanDock" width="276" height="276">
+    <img src="assets/banglaqr.svg?v=1" alt="BanglaQR payment code for supporting CleanDock" width="276" height="276" loading="lazy" decoding="async">
   </div>
   <p class="qr-tip">On your phone? Save the code, then choose “Scan from gallery” in your payment app.</p>
   <div class="qr-actions">
@@ -492,7 +617,7 @@
   </defs>
 </svg>
 
-<script src="catalog.js?v=11"></script>
-<script src="app.js?v=11"></script>
+<script src="catalog.js?v=12"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
