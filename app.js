@@ -540,16 +540,6 @@ qrModal.addEventListener("click", (e) => {
   if (!inside) qrModal.close();
 });
 
-/* share */
-$("#shareBtn").addEventListener("click", async (e) => {
-  e.preventDefault();
-  const data = { title: "CleanDock", text: "A smart dock for Windows — apps and live widgets in one bar.", url: location.href.split("#")[0] };
-  try {
-    if (navigator.share) await navigator.share(data);
-    else { await navigator.clipboard.writeText(data.url); toast("Link copied — thanks for sharing!"); }
-  } catch { /* the user closed the share sheet */ }
-});
-
 /* ───────── Live values ───────── */
 const setAll = (key, v) => $$(`[data-live="${key}"]`).forEach((el) => { if (el.textContent !== v) el.textContent = v; });
 let pomo = 18 * 60 + 42, rec = 42, mpos = 84;
