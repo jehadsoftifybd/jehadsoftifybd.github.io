@@ -10,7 +10,7 @@ const CONFIG = {
   issues: "",        // where people report bugs (GitHub issues, a form, …)
   ideas: "",         // where people suggest widgets
   email: "",         // e.g. "mailto:hello@example.com"
-  version: "0.9.3",
+  version: "0.9.4",
 };
 
 document.documentElement.classList.remove("no-js");
