@@ -775,6 +775,60 @@ if (drGrid) {
   }
 }
 
+/* ───────── What's new: dock magnification (try it with the pointer) ───────── */
+const mgDock = $("#mgDock");
+if (mgDock) {
+  const MG = [["F", "#ffd56b,#f59e0b", 1], ["B", "#fb923c,#ea580c", 1], ["T", "#38bdf8,#0284c7", 0], ["S", "#a78bfa,#7c3aed", 1], ["M", "#f472b6,#be185d", 0], ["C", "#4ade80,#16a34a", 1], ["P", "#60a5fa,#1d4ed8", 0]];
+  mgDock.innerHTML = MG.map(([l, g, run]) => `<span class="mg-app${run ? " run" : ""}"><i style="--g:linear-gradient(145deg,${g})">${l}</i></span>`).join("");
+  const icons = $$(".mg-app", mgDock), MAG = 1.6, REACH = 110;
+  const at = (x) => icons.forEach((el) => {
+    const r = el.getBoundingClientRect(), d = Math.abs(x - (r.left + r.width / 2));
+    el.style.setProperty("--mag", x == null ? 1 : (1 + (MAG - 1) * Math.max(0, 1 - (d / REACH) ** 2)).toFixed(3));
+  });
+  const stage = mgDock.parentElement;
+  let user = false, t0 = 0, raf = 0, seen = false;
+  stage.addEventListener("pointermove", (e) => { user = true; const r = mgDock.getBoundingClientRect(); at(e.clientY > r.top - 70 && e.clientY < r.bottom + 10 ? e.clientX : null); });
+  stage.addEventListener("pointerleave", () => { user = false; at(null); });
+  // Untouched, an unseen pointer sweeps along the dock and back.
+  const sweep = (t) => {
+    if (!t0) t0 = t;
+    if (!user && seen) { const r = mgDock.getBoundingClientRect(); at(r.left + r.width / 2 + Math.sin((t - t0) / 1100) * r.width * 0.42); }
+    raf = requestAnimationFrame(sweep);
+  };
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    new IntersectionObserver(([en]) => { seen = en.isIntersecting; if (!seen) at(null); }).observe(stage);
+    raf = requestAnimationFrame(sweep);
+  }
+}
+
+/* ───────── What's new: the windows island ───────── */
+const wi = $("#wi"), wiCol = $("#wiCol"), wiCards = $("#wiCards");
+const nap = (ms) => new Promise((r) => setTimeout(r, ms));
+if (wi) {
+  const app = ([l, g, n, min]) => `<span class="wi-app${min ? " min" : ""}"><i style="--g:linear-gradient(145deg,${g})">${l}</i>${n > 1 ? `<span class="n">${n}</span>` : ""}<span class="m"></span><span class="x"></span></span>`;
+  wiCol.innerHTML = [["X", "#4ade80,#15803d", 1, 1], ["B", "#fb923c,#ea580c", 2, 1]].map(app).join("") + `<span class="wi-line"></span>` + [["T", "#38bdf8,#0284c7", 1, 0], ["C", "#f472b6,#be185d", 1, 0]].map(app).join("");
+  const two = $$(".wi-app", wiCol)[1];
+  const cards = (on) => { two.classList.toggle("hot", on); wiCards.classList.toggle("show", on); };
+  let hover = false;
+  wi.addEventListener("mouseenter", () => { hover = true; wi.classList.add("open"); });
+  wi.addEventListener("mouseleave", () => { hover = false; wi.classList.remove("open"); cards(false); });
+  two.addEventListener("mouseenter", () => cards(true));
+  two.addEventListener("mouseleave", () => cards(false));
+  if (!reduceMotion) {
+    // Untouched: it floats out, rests on the app with two windows (its previews), and folds back.
+    const loop = async () => {
+      for (;;) {
+        await nap(1800); if (hover) continue;
+        wi.classList.add("open"); await nap(1300); if (hover) continue;
+        cards(true); await nap(1900); if (hover) continue;
+        cards(false); await nap(500); if (hover) continue;
+        wi.classList.remove("open");
+      }
+    };
+    loop();
+  } else wi.classList.add("open");
+}
+
 /* ───────── Reveal on scroll ───────── */
 if ("IntersectionObserver" in window && !reduceMotion) {
   // threshold 0: a block shows as soon as its top edge is a little way into the screen, however

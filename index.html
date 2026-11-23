@@ -155,7 +155,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=16">
+  <link rel="stylesheet" href="styles.css?v=17">
 </head>
 <body>
 
@@ -252,7 +252,7 @@
     <div class="sec-head reveal">
       <span class="eyebrow"><svg class="i"><use href="#i-spark"/></svg> New in CleanDock 0.9</span>
       <h2>More than a dock now.</h2>
-      <p>A Dynamic Island at the top of the screen, search that finds anything as you type, a dock that moves, controls on the screen's edge — and CleanDock keeps itself up to date.</p>
+      <p>A Dynamic Island at the top of the screen, search that finds anything as you type, a dock that magnifies and moves, islands on the screen's edges — and CleanDock keeps itself up to date.</p>
     </div>
 
     <div class="nw-grid">
@@ -321,6 +321,34 @@
           <p>Keep four apps on the dock and the rest in a drawer that opens above it, with window previews when you rest on an app. Icons hop when clicked and bounce while an app starts, and a minimised window shrinks into its icon and grows back out of it.</p>
         </div>
       </article>
+
+      <!-- Dock magnification -->
+      <article class="nw-card reveal" id="nwMag">
+        <div class="nw-stage nw-dark" aria-hidden="true">
+          <div class="mg-dock" id="mgDock"></div>
+          <span class="mg-hint">Try it: move the pointer over the dock</span>
+        </div>
+        <div class="nw-txt">
+          <h3>Magnification, as on a Mac</h3>
+          <p>The app icon under the pointer grows, its neighbours a little less, and the icons rise off the dock while it widens around them.</p>
+        </div>
+      </article>
+
+      <!-- Windows island -->
+      <article class="nw-card reveal" id="nwShelf">
+        <div class="nw-stage nw-wall" aria-hidden="true">
+          <div class="wi-win w1"></div><div class="wi-win w2"></div>
+          <div class="wi" id="wi">
+            <span class="wi-dots"><i></i><i></i></span>
+            <div class="wi-col" id="wiCol"></div>
+          </div>
+          <div class="wi-cards" id="wiCards"><span><b></b></span><span><b></b></span></div>
+        </div>
+        <div class="nw-txt">
+          <h3>Windows island</h3>
+          <p>A slim indicator waits on the left edge of the screen. Rest the pointer on it and a column of app icons floats out, minimized apps first: click one to open it, hover to minimize or close it, and an app with several windows shows their previews.</p>
+        </div>
+      </article>
     </div>
 
     <div class="nw-small">
@@ -338,7 +366,7 @@
         <div class="nm-art" aria-hidden="true">
           <div class="up-card">
             <div class="up-top"><img src="assets/icon-128.png" alt="" width="28" height="28"><span><b>CleanDock <span data-version>0.9.9</span></b><small>is ready to install</small></span></div>
-            <ul><li>Live Search</li><li>A drawer for your apps</li></ul>
+            <ul><li>Dock magnification</li><li>The windows island</li></ul>
             <div class="up-btns"><span class="up-go">Update now</span><span>Later</span></div>
           </div>
         </div>
@@ -764,6 +792,6 @@
 </svg>
 
 <script src="catalog.js?v=16"></script>
-<script src="app.js?v=16"></script>
+<script src="app.js?v=17"></script>
 </body>
 </html>
