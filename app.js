@@ -672,6 +672,109 @@ if ("IntersectionObserver" in window) {
   new IntersectionObserver(([en]) => { if (en.isIntersecting) navLinks.forEach((a) => a.setAttribute("aria-current", "false")); }, { rootMargin: "-45% 0px -50% 0px" }).observe($(".hero"));
 }
 
+/* ───────── What's new: Dynamic Island ───────── */
+const ISL_IC = {
+  shuffle: '<path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  out: '<rect x="4" y="3" width="16" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="14" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="1.2" fill="currentColor"/>',
+  mic: '<rect x="9" y="2.5" width="6" height="12" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  cam: '<path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3z" fill="currentColor"/>',
+};
+const isvg = (k) => `<svg viewBox="0 0 24 24">${ISL_IC[k]}</svg>`;
+const ring = (label, p, c) => `<span><i class="ib-ring" style="--p:${p};--c:${c}"></i>${label} · ${p}%</span>`;
+const ISL = {
+  music: () => `<div class="ib-row"><span class="ib-cover"></span><span class="ib-meta"><b>Midnight Drive</b><small>Neon Coast</small></span><span class="bars"><i></i><i></i><i></i><i></i><i></i></span></div>
+    <div class="ib-prog">1:24<span><i></i></span>3:42</div>
+    <div class="ib-ctl">${isvg("shuffle")}${ic("prev")}<span class="big">${ic("pause")}</span>${ic("next")}${isvg("out")}</div>`,
+  claude: () => `<div class="ib-head"><span class="ib-logo" style="background:#d97757">✳</span><b>Claude Code</b><small>2 sessions</small></div>
+    <div class="ib-task"><span class="spin"></span><b>cleandock</b><em>Working…</em></div>
+    <div class="ib-task"><span class="ib-dot" style="--c:#fbbf24"></span><b>website</b><em class="warn">Needs your permission</em><span class="ib-allow">Allow</span></div>
+    <div class="ib-limits">${ring("5-hour", 42, "#f59e6b")}${ring("Weekly", 68, "#a78bfa")}</div>`,
+  codex: () => `<div class="ib-head"><span class="ib-logo" style="background:#fff;color:#000">◎</span><b>Codex</b><small>3 tasks</small></div>
+    <div class="ib-task"><span class="spin"></span><b>Refactor search index</b><em>Working…</em></div>
+    <div class="ib-task"><span class="ib-dot" style="--c:#fbbf24"></span><b>Fix tray icons</b><em class="warn">Needs approval</em></div>
+    <div class="ib-task"><span class="ib-dot" style="--c:#34d399"></span><b>Write tests</b><em class="ok">Done ✓</em></div>
+    <div class="ib-limits">${ring("5-hour", 31, "#5fb4ff")}${ring("Weekly", 54, "#34d399")}</div>`,
+  rec: () => `<div class="ib-rec"><span class="live"></span><b id="islRec">00:42</b>${isvg("mic")}${isvg("cam")}<span class="btns"><span><i></i></span><span>${ic("pause")}</span></span></div>`,
+};
+const isl = $("#isl"), islBody = $("#islBody"), islTabs = $$("[data-isl]");
+let islState = "music", islTimer, islRecSec = 42;
+function setIsland(state) {
+  if (!isl) return;
+  islState = state;
+  islTabs.forEach((t) => t.setAttribute("aria-selected", t.dataset.isl === state));
+  islBody.classList.add("fade");
+  setTimeout(() => { isl.dataset.state = state; islBody.innerHTML = ISL[state](); islBody.classList.remove("fade"); }, reduceMotion ? 0 : 220);
+}
+function islAuto() {
+  clearInterval(islTimer);
+  if (reduceMotion) return;
+  islTimer = setInterval(() => { const k = Object.keys(ISL); setIsland(k[(k.indexOf(islState) + 1) % k.length]); }, 4800);
+}
+if (isl) {
+  islBody.innerHTML = ISL.music();
+  islTabs.forEach((t) => t.addEventListener("click", () => { setIsland(t.dataset.isl); islAuto(); }));
+  // scroll on the island steps through it, as in the app
+  isl.addEventListener("wheel", (e) => { e.preventDefault(); const k = Object.keys(ISL); setIsland(k[(k.indexOf(islState) + (e.deltaY > 0 ? 1 : k.length - 1)) % k.length]); islAuto(); }, { passive: false });
+  $("#nwIsland").addEventListener("mouseenter", () => clearInterval(islTimer));
+  $("#nwIsland").addEventListener("mouseleave", islAuto);
+  islAuto();
+  setInterval(() => { islRecSec++; const r = $("#islRec"); if (r) r.textContent = `${pad(Math.floor(islRecSec / 60))}:${pad(islRecSec % 60)}`; }, 1000);
+}
+
+/* ───────── What's new: Live Search ───────── */
+const LS_IC = (bg, t) => `<span class="lsm-ic" style="background:${bg}">${t}</span>`;
+const LS_QUERIES = [
+  { q: "rep", ghost: "ort.pdf", tail: " — Open", ms: 4, rows: [["h", "Top hit"], ["sel", LS_IC("#e5484d", "PDF"), "report.pdf", "Documents › Work"], ["h", "Apps"], ["", LS_IC("#0ea5e9", "R"), "Remote Desktop Connection", "App"], ["h", "Settings"], ["", LS_IC("#64748b", "⚙"), "Region", "Time & language"]] },
+  { q: "128*4", ghost: "", tail: "  = 512", ms: 1, rows: [["h", "Sum"], ["sel", LS_IC("#f59e0b", "="), "128 × 4 = 512", "Enter copies it"], ["h", "Files"], ["", LS_IC("#22c55e", "XLS"), "budget-128.xlsx", "Desktop"]] },
+  { q: "dis", ghost: "play", tail: " — Open", ms: 3, rows: [["h", "Top hit"], ["sel", LS_IC("#64748b", "⚙"), "Display", "System settings"], ["h", "Apps"], ["", LS_IC("#5865f2", "D"), "Discord", "App"], ["h", "Folders"], ["", LS_IC("#f5b301", "▸"), "Disk images", "D:\\"]] },
+];
+const lsTyped = $("#lsTyped"), lsGhost = $("#lsGhost"), lsOpen = $("#lsOpen"), lsList = $("#lsList"), lsMs = $("#lsMs");
+async function runSearchDemo() {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  for (let n = 0; ; n = (n + 1) % LS_QUERIES.length) {
+    const s = LS_QUERIES[n];
+    lsGhost.textContent = ""; lsOpen.textContent = ""; lsList.innerHTML = ""; lsTyped.textContent = "";
+    for (const ch of s.q) { lsTyped.textContent += ch; await wait(reduceMotion ? 0 : 150); }
+    lsGhost.textContent = s.ghost; lsOpen.textContent = s.tail; lsMs.textContent = `${s.ms} ms`;
+    lsList.innerHTML = s.rows.map(([k, ...r]) => k === "h" ? `<div class="lsm-h">${r[0]}</div>` : `<div class="lsm-row ${k}">${r[0]}<span>${r[1]}</span><small>${r[2]}</small></div>`).join("");
+    if (reduceMotion) return;
+    await wait(3200);
+  }
+}
+if (lsList) runSearchDemo();
+
+/* ───────── What's new: Start pages and the dock drawer ───────── */
+const GRADS = ["#60a5fa,#2563eb", "#4ade80,#16a34a", "#fbbf24,#f97316", "#f472b6,#db2777", "#a78bfa,#7c3aed", "#22d3ee,#0891b2", "#fb7185,#e11d48", "#e2e8f0,#94a3b8", "#34d399,#059669", "#fcd34d,#d97706"];
+const NAMES = ["Mail", "Photos", "Music", "Code", "Notes", "Files", "Store", "Paint", "Maps", "Camera", "Clock", "Weather", "Terminal", "Calendar", "Edge", "Teams", "Excel", "Word"];
+const appTile = (i) => `<span class="st-app"><i style="--g:linear-gradient(145deg,${GRADS[i % GRADS.length]})"></i><b>${NAMES[i % NAMES.length]}</b></span>`;
+$$(".st-page").forEach((p, pi) => { p.innerHTML = Array.from({ length: 18 }, (_, i) => appTile(i + pi * 7)).join(""); });
+const az = $(".st-az");
+if (az) az.innerHTML = az.textContent.trim().split(/\s+/).map((l) => `<span>${l}</span>`).join("");
+const stStrip = $("#stStrip"), stDots = $$(".st-dots i");
+if (stStrip && !reduceMotion) setInterval(() => { const two = stStrip.classList.toggle("p2"); stDots.forEach((d, i) => d.classList.toggle("on", i === (two ? 1 : 0))); }, 3600);
+
+const drGrid = $("#drGrid"), drDock = $("#drDock");
+if (drGrid) {
+  drGrid.innerHTML = Array.from({ length: 10 }, (_, i) => appTile(i + 4)).join("");
+  const dockApps = [["F", "#ffd56b,#f59e0b", 1], ["W", "#60a5fa,#1d4ed8", 1], ["N", "#4ade80,#16a34a", 0], ["M", "#f472b6,#be185d", 1]];
+  drDock.innerHTML = dockApps.map(([l, g, run]) => `<span class="dr-app${run ? " run" : ""}" style="--g:linear-gradient(145deg,${g})">${l}</span>`).join("")
+    + `<span class="dr-btn" title="More apps"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2" fill="currentColor"/><circle cx="12" cy="6" r="2" fill="currentColor"/><circle cx="18" cy="6" r="2" fill="currentColor"/><circle cx="6" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="18" cy="12" r="2" fill="currentColor"/><circle cx="6" cy="18" r="2" fill="currentColor"/><circle cx="12" cy="18" r="2" fill="currentColor"/><circle cx="18" cy="18" r="2" fill="currentColor"/></svg></span>`
+    + `<span class="dr-sep"></span><span class="dr-tile" data-live="hm">10:42</span>`;
+  // point the drawer's arrow at the drawer button
+  const aim = () => { const b = $(".dr-btn", drDock).getBoundingClientRect(), p = $(".dr-pop").getBoundingClientRect(); if (p.width) $(".dr-pop").style.setProperty("--ax", b.left + b.width / 2 - p.left + "px"); };
+  aim(); addEventListener("resize", aim); new ResizeObserver(aim).observe(drDock);
+  if (!reduceMotion) {
+    const apps = $$(".dr-app", drDock);
+    let k = 0;
+    setInterval(() => {
+      const a = apps[k % apps.length], launch = k % 3 === 2;
+      a.classList.remove("hop", "launch"); void a.offsetWidth; a.classList.add(launch ? "launch" : "hop");
+      if (launch) setTimeout(() => a.classList.add("run"), 1400);
+      k++;
+    }, 1800);
+  }
+}
+
 /* ───────── Reveal on scroll ───────── */
 if ("IntersectionObserver" in window && !reduceMotion) {
   // threshold 0: a block shows as soon as its top edge is a little way into the screen, however

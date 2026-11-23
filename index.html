@@ -64,10 +64,11 @@
         },
         "featureList": [
           "Replaces the Windows taskbar with a Liquid Glass dock on any screen edge",
-          "115 live dock widgets in 13 categories",
-          "26 desktop widgets with light and dark styles",
-          "Own Start menu, file browser, notes board and screenshot tool",
-          "Restores the original taskbar when you quit"
+          "115 live dock widgets in 13 categories and 26 desktop widgets",
+          "Dynamic Island for music, recordings, Claude Code and Codex",
+          "Live Search for apps, files, settings and sums (Alt + Space)",
+          "Start menu with app pages, file browser, notes board and screenshot tool",
+          "Updates itself; restores the original taskbar when you quit"
         ]
       },
       {
@@ -124,6 +125,22 @@
           },
           {
             "@type": "Question",
+            "name": "How does CleanDock update?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It updates itself. When a new version is out, a card beside the dock shows what's new, with Update now and Later. You can also check any time in Settings → Check for updates."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does CleanDock collect any data?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Only anonymous counts of installs and daily use: the CleanDock version, your Windows version and language. No names, files, window titles or account keys."
+            }
+          },
+          {
+            "@type": "Question",
             "name": "Does it start with Windows?",
             "acceptedAnswer": {
               "@type": "Answer",
@@ -138,7 +155,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
 
@@ -169,7 +186,7 @@
 <section class="hero">
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="wrap hero-copy reveal">
-    <a class="pill" href="#features"><span class="pill-dot"></span><span>v<span data-version>0.9.8</span> · For Windows 11 &amp; 10</span></a>
+    <a class="pill" href="#new"><span class="pill-dot"></span><span><b>New in v<span data-version>0.9.8</span></b> · Dynamic Island &amp; Live Search</span><svg class="i"><use href="#i-arrow"/></svg></a>
     <h1>Your Windows taskbar, rebuilt as a <span class="grad">smart dock</span>.</h1>
     <p class="lead">CleanDock puts your apps and <b data-count="dock">115</b> live widgets in one Liquid Glass bar — and <b>26</b> more widgets right on your desktop. Light, beautiful, and fully reversible.</p>
     <div class="hero-cta">
@@ -208,6 +225,9 @@
           <div class="dw dw-s light" data-dw="wifi"></div>
         </div>
 
+        <!-- Dynamic Island, small, with music playing -->
+        <div class="hero-isl" aria-hidden="true"><span class="isl-ear l"></span><span class="isl-ear r"></span><span class="hi-cover"></span><span class="hi-bars"><i></i><i></i><i></i><i></i></span></div>
+
         <!-- the dock -->
         <div class="dock skin-glass pos-bottom" id="heroDock"></div>
       </div>
@@ -223,6 +243,125 @@
     <div><b>13</b><span>Categories</span></div>
     <div><b>4</b><span>Styles</span></div>
     <div><b>4</b><span>Screen edges</span></div>
+  </div>
+</section>
+
+<!-- ───────────── What's new ───────────── -->
+<section class="sec" id="new">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg class="i"><use href="#i-spark"/></svg> New in CleanDock 0.9</span>
+      <h2>More than a dock now.</h2>
+      <p>A Dynamic Island at the top of the screen, search that finds anything as you type, a dock that moves, controls on the screen's edge — and CleanDock keeps itself up to date.</p>
+    </div>
+
+    <div class="nw-grid">
+      <!-- Dynamic Island -->
+      <article class="nw-card nw-wide reveal" id="nwIsland">
+        <div class="nw-stage nw-dark" aria-hidden="true">
+          <div class="isl-wall"></div>
+          <div class="isl" id="isl" data-state="music"><span class="isl-ear l"></span><span class="isl-ear r"></span><div class="isl-body" id="islBody"></div></div>
+        </div>
+        <div class="nw-txt">
+          <div class="nw-tabs" role="tablist" aria-label="What Dynamic Island shows">
+            <button role="tab" aria-selected="true" data-isl="music">Music</button>
+            <button role="tab" aria-selected="false" data-isl="claude">Claude Code</button>
+            <button role="tab" aria-selected="false" data-isl="codex">Codex</button>
+            <button role="tab" aria-selected="false" data-isl="rec">Recording</button>
+          </div>
+          <h3>Dynamic Island</h3>
+          <p>A notch at the top centre of the screen. Rest the pointer on it to open it; scroll on it to step through what it shows: the music player with moving bars, your Claude Code and Codex sessions with their usage limits, or a recording in progress.</p>
+        </div>
+      </article>
+
+      <!-- Live Search -->
+      <article class="nw-card reveal">
+        <div class="nw-stage nw-blur" aria-hidden="true">
+          <div class="ls-mock">
+            <div class="lsm-bar">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span class="lsm-field"><span id="lsTyped">rep</span><span class="lsm-caret"></span><span class="lsm-ghost" id="lsGhost">ort.pdf</span><span class="lsm-open" id="lsOpen"> — Open</span></span>
+            </div>
+            <div class="lsm-list" id="lsList"></div>
+            <div class="lsm-foot"><span>↑↓ choose</span><span>↵ open</span><span class="lsm-ms" id="lsMs">4 ms</span></div>
+          </div>
+        </div>
+        <div class="nw-txt">
+          <h3>Live Search <kbd>Alt</kbd><kbd>Space</kbd></h3>
+          <p>Apps, files and folders on every drive, Windows settings and quick sums, as you type, in a few milliseconds. Enter opens, Ctrl+Enter shows a file in its folder.</p>
+        </div>
+      </article>
+
+      <!-- Start pages -->
+      <article class="nw-card reveal">
+        <div class="nw-stage nw-dark" aria-hidden="true">
+          <div class="st-mock">
+            <div class="st-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Search</div>
+            <div class="st-pages"><div class="st-strip" id="stStrip"><div class="st-page"></div><div class="st-page"></div></div></div>
+            <div class="st-dots"><i class="on"></i><i></i><i></i></div>
+            <div class="st-az">A B C D E F G H I K L M N O P R S T W</div>
+          </div>
+        </div>
+        <div class="nw-txt">
+          <h3>Start, on full pages</h3>
+          <p>Your apps fill the screen on pages, pinned ones first. Turn pages with the wheel or touchpad, by dragging, with the arrow keys, the dots or the A–Z index. On a laptop it fits in one tidy layout.</p>
+        </div>
+      </article>
+
+      <!-- Dock drawer & motion -->
+      <article class="nw-card nw-wide reveal">
+        <div class="nw-stage nw-wall" aria-hidden="true">
+          <div class="dr-pop">
+            <div class="dr-grid" id="drGrid"></div>
+          </div>
+          <div class="dr-dock" id="drDock"></div>
+        </div>
+        <div class="nw-txt">
+          <h3>A dock with a drawer, and some bounce</h3>
+          <p>Keep four apps on the dock and the rest in a drawer that opens above it, with window previews when you rest on an app. Icons hop when clicked and bounce while an app starts, and a minimised window shrinks into its icon and grows back out of it.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="nw-small">
+      <article class="nw-mini reveal">
+        <div class="nm-art nm-side" aria-hidden="true">
+          <div class="sd-notch">
+            <div class="sd-slider" style="--v:72%"><i></i><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/></svg></div>
+            <div class="sd-slider" style="--v:48%"><i></i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          </div>
+        </div>
+        <h3>Side controls</h3>
+        <p>Rest the pointer on the middle of the right edge for speaker and brightness sliders.</p>
+      </article>
+      <article class="nw-mini reveal">
+        <div class="nm-art" aria-hidden="true">
+          <div class="up-card">
+            <div class="up-top"><img src="assets/icon-128.png" alt="" width="28" height="28"><span><b>CleanDock <span data-version>0.9.8</span></b><small>is ready to install</small></span></div>
+            <ul><li>Live Search</li><li>A drawer for your apps</li></ul>
+            <div class="up-btns"><span class="up-go">Update now</span><span>Later</span></div>
+          </div>
+        </div>
+        <h3>Updates itself</h3>
+        <p>When a new version is out, a card beside the dock shows what's new, with Update now and Later.</p>
+      </article>
+      <article class="nw-mini reveal">
+        <div class="nm-art nm-theme" aria-hidden="true">
+          <div class="th-w th-l"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><b>10:42</b></div>
+          <div class="th-w th-d"><svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="currentColor"/></svg><b>22:10</b></div>
+        </div>
+        <h3>Follows light &amp; dark</h3>
+        <p>The dock and desktop widgets match Windows' light or dark mode, or give one widget its own.</p>
+      </article>
+      <article class="nw-mini reveal">
+        <div class="nm-art nm-shot" aria-hidden="true">
+          <div class="sh-area"></div>
+          <div class="sh-keys"><kbd>Ctrl</kbd><span>+</span><kbd>Shift</kbd><span>+</span><kbd>S</kbd></div>
+        </div>
+        <h3>Your Screenshot shortcut</h3>
+        <p>Pick the keys that start a screenshot in Settings, for example Ctrl + Shift + S.</p>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -324,7 +463,7 @@
         </div>
         <div class="app-txt">
           <h3>CleanDock Start</h3>
-          <p>A full-screen Start menu with search on top, a row of your favourite widgets, pinned apps, recent files and every app from A to Z. Opens from the Start button, the Windows key or Ctrl+Esc.</p>
+          <p>A full-screen Start with search on top, a row of your widgets, and your apps on pages: pinned ones first, then everything from A to Z. Turn pages with the wheel, by dragging, or with the dots and the A–Z index. Opens from the Start button, the Windows key or Ctrl+Esc.</p>
         </div>
       </article>
       <article class="app-card reveal">
@@ -381,11 +520,11 @@
       <article class="feat reveal"><span class="fi c-blue"><svg class="i"><use href="#i-glass"/></svg></span><h3>Liquid Glass design</h3><p>A real Windows blur behind the dock and every pop-up, clipped to smooth rounded corners. Or pick a solid style: Slate, Paper or Midnight.</p></article>
       <article class="feat reveal"><span class="fi c-green"><svg class="i"><use href="#i-eye"/></svg></span><h3>Everything at a glance</h3><p>CPU, battery, weather, music, your next task and today's revenue — live in the bar, without opening a single app.</p></article>
       <article class="feat reveal"><span class="fi c-amber"><svg class="i"><use href="#i-shield"/></svg></span><h3>Safe and reversible</h3><p>No Windows files are changed. The taskbar is set to auto-hide while the dock runs and comes back the moment you quit — even after a crash, with <code>--restore</code>.</p></article>
-      <article class="feat reveal"><span class="fi c-violet"><svg class="i"><use href="#i-lock"/></svg></span><h3>Private by design</h3><p>Account keys are encrypted with Windows data protection and sent only to the service they belong to. Most widgets never leave your PC.</p></article>
+      <article class="feat reveal"><span class="fi c-violet"><svg class="i"><use href="#i-lock"/></svg></span><h3>Private by design</h3><p>Account keys are encrypted with Windows data protection and sent only to the service they belong to. Most widgets never leave your PC, and usage stats are anonymous counts only.</p></article>
       <article class="feat reveal"><span class="fi c-cyan"><svg class="i"><use href="#i-bolt"/></svg></span><h3>Light and fast</h3><p>Built with Rust and Tauri, so it starts with Windows in a moment and stays out of your way.</p></article>
       <article class="feat reveal"><span class="fi c-pink"><svg class="i"><use href="#i-edges"/></svg></span><h3>Any edge you like</h3><p>Bottom, top, left or right. Maximized windows stop above the dock, and on a side edge the tiles stack in a column.</p></article>
       <article class="feat reveal"><span class="fi c-blue"><svg class="i"><use href="#i-palette"/></svg></span><h3>Your accent colour</h3><p>Selected buttons, rings and highlights follow the accent colour you chose in Windows Personalisation.</p></article>
-      <article class="feat reveal"><span class="fi c-green"><svg class="i"><use href="#i-term"/></svg></span><h3>Keyboard and command line</h3><p>Windows key opens Start, Win+E opens Files, and <code>cleandock.exe</code> takes flags to move the dock, open settings or quit.</p></article>
+      <article class="feat reveal"><span class="fi c-green"><svg class="i"><use href="#i-term"/></svg></span><h3>Keyboard and command line</h3><p>Windows key opens Start, Alt+Space opens Live Search, Win+E opens Files, and <code>cleandock.exe</code> takes flags to move the dock, open settings or quit.</p></article>
     </div>
   </div>
 </section>
@@ -465,7 +604,7 @@
       <div class="support-txt">
         <span class="eyebrow light"><svg class="i"><use href="#i-heart"/></svg> Support CleanDock</span>
         <h2>Enjoying CleanDock? Buy me a coffee.</h2>
-        <p>CleanDock is free, with no ads and no tracking. If it makes your desktop a little nicer every day, a coffee helps keep the updates and new widgets coming.</p>
+        <p>CleanDock is free, with no ads. If it makes your desktop a little nicer every day, a coffee helps keep the updates and new widgets coming.</p>
         <div class="support-cta">
           <a class="btn btn-lg btn-coffee" data-link="coffee" href="#" target="_blank" rel="noopener">
             <svg class="i"><use href="#i-coffee"/></svg> Buy me a coffee
@@ -497,6 +636,8 @@
       <details class="reveal"><summary>How do I add or remove widgets?</summary><p>Run CleanDock again while it's open, or right-click the dock, to open the widget picker. "Ready to use" shows everything that works right away; account widgets show "Click to connect" until you paste a key.</p></details>
       <details class="reveal"><summary>Where are my account keys stored?</summary><p>Only on your PC, encrypted with Windows data protection (DPAPI). Each key is sent only to the service it belongs to.</p></details>
       <details class="reveal"><summary>What are "Preview" widgets?</summary><p>They're finished designs — like Claude, ChatGPT, Gemini and Cursor usage — that still show sample numbers while their connection is being built. They're marked in the picker.</p></details>
+      <details class="reveal"><summary>How does CleanDock update?</summary><p>It updates itself. When a new version is out, a card beside the dock shows what's new, with Update now and Later. You can also check any time in Settings → Check for updates.</p></details>
+      <details class="reveal"><summary>Does CleanDock collect any data?</summary><p>Only anonymous counts of installs and daily use: the CleanDock version, your Windows version and language. No names, files, window titles or account keys.</p></details>
       <details class="reveal"><summary>Does it start with Windows?</summary><p>Yes, an installed copy always starts with Windows. You can still switch it off in Windows Settings → Apps → Startup, and CleanDock respects that.</p></details>
     </div>
   </div>
@@ -622,7 +763,7 @@
   </defs>
 </svg>
 
-<script src="catalog.js?v=15"></script>
-<script src="app.js?v=15"></script>
+<script src="catalog.js?v=16"></script>
+<script src="app.js?v=16"></script>
 </body>
 </html>
