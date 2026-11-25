@@ -239,6 +239,10 @@ const DESK = [
   ["Video Recorder", "Records the camera and microphone to Videos\\CleanDock Recordings.", "dark", 0, "camera"],
   ["Battery Ring", "Charge level on a coloured ring, a bolt while charging.", "dark", 0, "bolt"],
   ["Big Flip Clock", "Date, hours, minutes and seconds on flip cards; your own caption.", "dark", 0],
+  ["Prayer Time", "The next prayer with a countdown, today's five times and the Hijri date; the azan at each prayer time.", "dark", 0],
+  ["Prayer Checklist", "Tick each prayer; the month shows every day as a ring of five.", "dark", 0, "check"],
+  ["Radio", "Your country's FM and AM stations online, on a dial; REC records.", "dark", 0, "play"],
+  ["Tasbih Counter", "Five tasbihs: pick where to begin and how many, click to count.", "dark", 0],
 ];
 $("#deskList").innerHTML = DESK.map(([n, d, st, sample, icon]) =>
   `<div class="dl-item"><span class="dl-ic ${st}">${icon ? ic(icon, "i") : n[0]}</span><div><b>${n}${sample ? ` <span class="badge demo">Demo data</span>` : ""}</b><p>${d}</p></div></div>`).join("");
@@ -827,6 +831,230 @@ if (wi) {
     };
     loop();
   } else wi.classList.add("open");
+}
+
+/* ───────── What's new: the new desktop widgets (working minis of the real ones) ───────── */
+const PRAYERS = [["fajr", "Fajr", "الفجر"], ["dhuhr", "Dhuhr", "الظهر"], ["asr", "Asr", "العصر"], ["maghrib", "Maghrib", "المغرب"], ["isha", "Isha", "العشاء"]];
+// Prayer times as the app works them out (sun position; Karachi angles, Hanafi Asr), for Dhaka.
+const prayerTimes = (() => {
+  const rad = (d) => (d * Math.PI) / 180, deg = (x) => (x * 180) / Math.PI;
+  const sin = (d) => Math.sin(rad(d)), cos = (d) => Math.cos(rad(d)), tan = (d) => Math.tan(rad(d));
+  const fix = (a, b) => { const v = a - b * Math.floor(a / b); return v < 0 ? v + b : v; };
+  const sun = (jd) => {
+    const D = jd - 2451545, g = fix(357.529 + 0.98560028 * D, 360), q = fix(280.459 + 0.98564736 * D, 360);
+    const L = fix(q + 1.915 * sin(g) + 0.02 * sin(2 * g), 360), e = 23.439 - 0.00000036 * D;
+    return { decl: deg(Math.asin(sin(e) * sin(L))), eqt: q / 15 - fix(deg(Math.atan2(cos(e) * sin(L), cos(L))) / 15, 24) };
+  };
+  const julian = (y, m, d) => { if (m <= 2) { y--; m += 12; } const A = Math.floor(y / 100), B = 2 - A + Math.floor(A / 4); return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + B - 1524.5; };
+  return (y, m, d, lat = 23.8103, lon = 90.4125) => {
+    const jd = julian(y, m, d) - lon / 360;
+    const noon = (t) => fix(12 - sun(jd + t / 24).eqt, 24);
+    const at = (a, t, before) => { const { decl } = sun(jd + t / 24); const h = deg(Math.acos((-sin(a) - sin(decl) * sin(lat)) / (cos(decl) * cos(lat)))) / 15; return noon(t) + (before ? -h : h); };
+    const asr = (t) => { const { decl } = sun(jd + t / 24); return at(-deg(Math.atan(1 / (2 + tan(Math.abs(lat - decl))))), t, false); };
+    let t = { fajr: 5, sunrise: 6, dhuhr: 12, asr: 13, maghrib: 18, isha: 18 };
+    for (let i = 0; i < 2; i++) t = { fajr: at(18, t.fajr, true), sunrise: at(0.833, t.sunrise, true), dhuhr: noon(t.dhuhr), asr: asr(t.asr), maghrib: at(0.833, t.maghrib, false), isha: at(18, t.isha, false) };
+    const base = Date.UTC(y, m - 1, d), ms = (h) => Math.round((base + (h - lon / 15) * 3600000) / 60000) * 60000;
+    return Object.fromEntries(Object.entries(t).map(([k, v]) => [k, ms(v)]));
+  };
+})();
+const DHAKA = "Asia/Dhaka";
+const dhakaYMD = (t) => new Intl.DateTimeFormat("en-CA", { timeZone: DHAKA, year: "numeric", month: "2-digit", day: "2-digit" }).format(t).split("-").map(Number);
+const dhakaHM = (t) => new Intl.DateTimeFormat("en-GB", { timeZone: DHAKA, hour: "numeric", minute: "2-digit", hourCycle: "h23" }).format(t).replace(/^0(\d)/, "$1");
+const dayTimes = (t, o) => { const [y, m, d] = dhakaYMD(t); return prayerTimes(y, m, d + o); };
+const SKY = { fajr: ["#ff9e7a", "#7b5cff", "#2a2357"], morning: ["#ffd56b", "#2fb3e0", "#0f3d5c"], dhuhr: ["#ffe27a", "#2d8cff", "#0b2f66"], asr: ["#ff8a1f", "#e8264f", "#5c0f22"], maghrib: ["#ff5f6d", "#9b3ce6", "#2e1146"], night: ["#4b5fe0", "#7a3fe4", "#121a4a"] };
+const prayerIcon = (id) => {
+  const h = '<path d="M3.5 16.5h17"/><path d="M7.5 20h9"/>';
+  return `<svg viewBox="0 0 24 24">${{
+    fajr: `${h}<path d="M7 16.5a5 5 0 0 1 10 0"/><path d="M12 10V3.2M9.2 6 12 3.2 14.8 6"/>`,
+    maghrib: `${h}<path d="M7 16.5a5 5 0 0 1 10 0"/><path d="M12 3.2V10M9.2 7.2 12 10l2.8-2.8"/>`,
+    dhuhr: `<circle cx="12" cy="12" r="4.2"/>${[0, 45, 90, 135, 180, 225, 270, 315].map((a) => `<path d="M12 3.2v2.2" transform="rotate(${a} 12 12)"/>`).join("")}`,
+    asr: `${h}<circle cx="12" cy="11" r="3.6"/>${[0, 45, 90, -45, 270].map((a) => `<path d="M12 4v1.8" transform="rotate(${a} 12 11)"/>`).join("")}`,
+    isha: '<path d="M15.8 4.2a7.6 7.6 0 1 0 4 12.6 6.2 6.2 0 0 1-4-12.6z"/>',
+  }[id]}</svg>`;
+};
+
+/* Prayer Time: live for Dhaka, or at a time of day picked on the tabs */
+const xp = $("#xp");
+if (xp) {
+  let shift = 0;
+  const draw = () => {
+    const t = Date.now() + shift, today = dayTimes(t, 0);
+    let cur, from, next, at;
+    if (t < today.fajr) [cur, from, next, at] = ["isha", dayTimes(t, -1).isha, "fajr", today.fajr];
+    else if (t < today.sunrise) [cur, from, next, at] = ["fajr", today.fajr, "dhuhr", today.dhuhr];
+    else if (t < today.dhuhr) [cur, from, next, at] = [null, today.sunrise, "dhuhr", today.dhuhr];
+    else if (t < today.asr) [cur, from, next, at] = ["dhuhr", today.dhuhr, "asr", today.asr];
+    else if (t < today.maghrib) [cur, from, next, at] = ["asr", today.asr, "maghrib", today.maghrib];
+    else if (t < today.isha) [cur, from, next, at] = ["maghrib", today.maghrib, "isha", today.isha];
+    else [cur, from, next, at] = ["isha", today.isha, "fajr", dayTimes(t, 1).fajr];
+    const period = cur === null ? "morning" : cur === "isha" ? "night" : cur;
+    const [p1, p2, p3] = SKY[period];
+    xp.style.setProperty("--p1", p1); xp.style.setProperty("--p2", p2); xp.style.setProperty("--p3", p3);
+    xp.dataset.p = period;
+    const left = Math.max(0, Math.ceil((at - t) / 1000)), hh = Math.floor(left / 3600), mm = Math.floor((left % 3600) / 60), ss = left % 60;
+    const count = hh ? `${hh}:${pad(mm)}:${pad(ss)}` : `${mm}:${pad(ss)}`;
+    const done = Math.max(0, Math.min(1, (t - from) / (at - from))), C = 2 * Math.PI * 57;
+    const nx = PRAYERS.find((p) => p[0] === next);
+    let hijri = "";
+    try { hijri = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", { timeZone: DHAKA, day: "numeric", month: "long", year: "numeric" }).format(t); } catch { /* old browser */ }
+    xp.innerHTML = `<div class="xp-bg"><span class="xp-band"></span><span class="xp-stars"></span></div>
+      <div class="xp-top"><span class="xp-loc"><svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg><b>Dhaka</b><span>BD</span></span><span class="xp-hij">${hijri}</span></div>
+      <div class="xp-main"><div><span class="xp-k">Next prayer</span><div class="xp-name"><b>${nx[1]}</b><span class="xar" dir="rtl">${nx[2]}</span></div>
+        <div class="xp-count">${count}</div><div class="xp-sub">at ${dhakaHM(at)} · ${cur === "fajr" ? `Fajr ends ${dhakaHM(today.sunrise)}` : `Sunrise ${dhakaHM(next === "fajr" && t > today.isha ? dayTimes(t, 1).sunrise : today.sunrise)}`}</div></div>
+        <div class="xp-ring"><svg viewBox="0 0 132 132"><circle cx="66" cy="66" r="64" class="g"/><circle cx="66" cy="66" r="57" class="t"/><circle cx="66" cy="66" r="57" class="a" stroke-dasharray="${(C * done).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 66 66)"/><circle cx="66" cy="66" r="47" class="c"/></svg>
+          <span class="xp-in">${prayerIcon(next)}<b>${Math.round(done * 100)}%</b></span></div></div>
+      <div class="xp-chips">${PRAYERS.map(([id, name]) => {
+        const when = id === next ? at : today[id];
+        const st = id === cur ? "cur" : id === next ? "next" : when < t ? "past" : "";
+        return `<span class="xp-chip ${st}"><span>${name}</span><b>${dhakaHM(when)}</b></span>`;
+      }).join("")}</div>`;
+  };
+  draw();
+  setInterval(draw, 1000);
+  const tabs = $$("[data-xp]");
+  tabs.forEach((b) => b.addEventListener("click", () => {
+    tabs.forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+    const id = b.dataset.xp;
+    // A picked prayer: its time today, 25 minutes in.
+    shift = id === "now" ? 0 : dayTimes(Date.now(), 0)[id] + 25 * 60000 - Date.now();
+    draw();
+  }));
+}
+
+/* Tasbih Counter: click to count; untouched, it counts by itself */
+const xt = $("#xt");
+if (xt) {
+  const T = [["SubhanAllah", "سُبْحَانَ اللَّهِ", "Glory be to Allah", "#2fbf8f"], ["Alhamdulillah", "الْحَمْدُ لِلَّهِ", "All praise is for Allah", "#3aa6e8"], ["Allahu Akbar", "اللَّهُ أَكْبَرُ", "Allah is the Greatest", "#e8a93a"],
+    ["La ilaha illallah", "لَا إِلَهَ إِلَّا اللَّهُ", "There is no god but Allah", "#8f7cf0"], ["Astaghfirullah", "أَسْتَغْفِرُ اللَّهَ", "I seek forgiveness from Allah", "#e86a8a"]];
+  const GOAL = 33, R = 92, RA = 104, C = 2 * Math.PI * RA;
+  let idx = 0, n = 0, today = 0, busy = false, touched = 0;
+  const draw = () => {
+    const [tr, ar, en, hue] = T[idx], complete = n >= GOAL, lit = n ? ((n - 1) % 33) + 1 : 0;
+    xt.style.setProperty("--ta", hue);
+    xt.classList.toggle("complete", complete);
+    xt.innerHTML = `<div class="xt-top"><span class="xt-steps">${T.map((x, i) => `<i class="${i < idx ? "past" : i === idx ? "now" : ""}" style="--c:${x[3]}"></i>`).join("")}</span><span class="xt-today">Today ${today}</span></div>
+      <div class="xt-tap"><svg viewBox="0 0 236 236"><g class="xt-star"><rect x="74" y="74" width="88" height="88" rx="3"/><rect x="74" y="74" width="88" height="88" rx="3" transform="rotate(45 118 118)"/></g>
+        <circle cx="118" cy="118" r="${RA}" class="xt-track"/><circle cx="118" cy="118" r="${RA}" class="xt-prog" stroke-dasharray="${(C * Math.min(1, n / GOAL)).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 118 118)"/>
+        ${Array.from({ length: 33 }, (_, i) => { const a = -Math.PI / 2 + (i / 33) * Math.PI * 2; return `<circle cx="${(118 + R * Math.cos(a)).toFixed(1)}" cy="${(118 + R * Math.sin(a)).toFixed(1)}" r="${i === lit - 1 ? 6.2 : 4.6}" class="xt-bead${i < lit ? " on" : ""}${i === lit - 1 ? " cur" : ""}"/>`; }).join("")}</svg>
+        <span class="xt-mid"><span class="xar" dir="rtl">${ar}</span><b class="xt-n">${complete ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>' : n}</b><span class="xt-of">${complete ? `Next: ${T[(idx + 1) % T.length][0]}` : `of ${GOAL}`}</span></span></div>
+      <div class="xt-txt"><b>${tr}</b><span>“${en}”</span></div>`;
+  };
+  const count = () => {
+    if (busy) return;
+    n++; today++;
+    if (n >= GOAL) { busy = true; setTimeout(() => { busy = false; idx = (idx + 1) % T.length; n = 0; draw(); }, 1100); }
+    draw();
+  };
+  xt.addEventListener("click", (e) => { if (e.target.closest(".xt-tap")) { touched = Date.now(); count(); } });
+  draw();
+  let seen = false;
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    new IntersectionObserver(([en]) => { seen = en.isIntersecting; }).observe(xt);
+    setInterval(() => { if (seen && Date.now() - touched > 5000) count(); }, 170);
+  }
+}
+
+/* Radio: drag the dial (or scroll on it) to tune; untouched, it steps from station to station */
+const xr = $("#xr");
+if (xr) {
+  const ST = [[88, "Radio Foorti"], [89.6, "Radio Today"], [90, "Bangladesh Betar"], [90.4, "Dhaka FM"], [91.6, "Peoples Radio"], [92.4, "Radio Shadhin"], [92.8, "Radio Bhumi"], [93.6, "Radio Din Raat"], [94.4, "Jago FM"], [96.4, "Spice FM"]];
+  const CX = 333, CY = 166, DEG = 7;
+  let f = 94.4, on = true, touched = 0, drag = null;
+  const pt = (a, r) => [CX + r * Math.cos(rad(a)), CY + r * Math.sin(rad(a))];
+  const rad = (a) => (a * Math.PI) / 180;
+  const arc = (r1, r2, a1, a2) => { const [x1, y1] = pt(a1, r2), [x2, y2] = pt(a2, r2), [x3, y3] = pt(a2, r1), [x4, y4] = pt(a1, r1); return `M${x1} ${y1}A${r2} ${r2} 0 0 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 0 0 ${x4} ${y4}Z`; };
+  const draw = () => {
+    const st = ST.find((s) => Math.abs(s[0] - f) < 0.05), ang = (v) => 180 + (v - f) * DEG;
+    const phase = ((-(f - 87.5) * DEG) % 3.5 + 3.5) % 3.5;
+    let ticks = "";
+    for (let a = phase; a < 360; a += 3.5) { const [x1, y1] = pt(a, 166), [x2, y2] = pt(a, 184), [x3, y3] = pt(a + 1.75, 140), [x4, y4] = pt(a + 1.75, 146); ticks += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" class="tk"/><line x1="${x3.toFixed(1)}" y1="${y3.toFixed(1)}" x2="${x4.toFixed(1)}" y2="${y4.toFixed(1)}" class="tk s"/>`; }
+    let nums = "", near = 88;
+    for (let v = 88; v <= 108; v += 2) if (Math.abs(v - f) < Math.abs(near - f)) near = v;
+    for (let v = 88; v <= 108; v += 2) { const a = ang(v); if (a < 100 || a > 260 || Math.abs(a - 180) < 3.2) continue; const [x, y] = pt(a, 266); nums += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" class="num${v === near ? " near" : ""}" style="opacity:${v === near ? 1 : Math.max(0.25, 1 - Math.abs(a - 180) / 85).toFixed(2)}" transform="rotate(${(a - 180).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})" text-anchor="middle" dominant-baseline="middle">${v}</text>`; }
+    const marks = ST.map(([v]) => { const a = ang(v); if (a < 95 || a > 265) return ""; const [x1, y1] = pt(a, 243), [x2, y2] = pt(a, 249); return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" class="mk${st && st[0] === v ? " now" : ""}"/>`; }).join("");
+    const shown = f.toFixed(1), pad0 = "0".repeat(Math.max(0, 5 - shown.length));
+    const now = new Date();
+    xr.classList.toggle("on", on && !!st);
+    xr.innerHTML = `<svg viewBox="0 0 482 332"><path d="${arc(122, 300, 90, 270)}" class="grab"/><path d="${arc(190, 240, 180, 300)}" class="hi"/><path d="${arc(190, 240, 60, 180)}" class="lo"/>${ticks}${marks}${nums}
+      <path d="M${CX - 286} ${CY - 5}l8 5-8 5z" class="ptr"/><line x1="${CX - 274}" y1="${CY}" x2="${CX - 243}" y2="${CY}" class="pl"/><line x1="${CX - 190}" y1="${CY}" x2="${CX - 176}" y2="${CY}" class="pl"/><path d="M${CX - 170} ${CY}l7 -4.5v9z" class="ptr"/>
+      <text x="${CX - 147}" y="${CY + 0.5}" class="unit" text-anchor="middle" dominant-baseline="middle">MHz</text><line x1="${CX - 133}" y1="${CY}" x2="${CX - 127}" y2="${CY}" class="pl"/><line x1="${CX - 122}" y1="${CY}" x2="${CX - 116}" y2="${CY}" class="pl"/></svg>
+      <div class="xr-top"><span class="xr-rec">REC<i></i></span><span class="xr-clock"><i></i>${now.getHours()}:${pad(now.getMinutes())}</span></div>
+      <div class="xr-info"><span class="xr-head"><b>${shown} FM</b><span class="xr-name">${st ? st[1] : "No station"}</span></span>
+        <span class="xr-freq"><span class="pad">${pad0}</span>${shown}</span><span class="xr-bands"><span class="on">FM</span><span>AM</span></span></div>`;
+  };
+  const tune = (v) => { f = Math.round(Math.min(108, Math.max(87.5, v)) * 10) / 10; draw(); };
+  xr.addEventListener("pointerdown", (e) => {
+    if (e.target.closest(".xr-freq")) { on = !on; touched = Date.now(); draw(); return; }
+    if (!e.target.classList.contains("grab")) return;
+    drag = { y: e.clientY, f };
+    touched = Date.now();
+    try { xr.setPointerCapture(e.pointerId); } catch { /* no capture */ }
+  });
+  xr.addEventListener("pointermove", (e) => {
+    if (!drag) return;
+    touched = Date.now();
+    // Up raises the frequency; the stage is scaled, so a step every 4 px of the page.
+    tune(drag.f + Math.round((drag.y - e.clientY) / 4) * 0.1);
+  });
+  const end = () => { drag = null; };
+  xr.addEventListener("pointerup", end);
+  xr.addEventListener("pointercancel", end);
+  xr.addEventListener("wheel", (e) => {
+    if (!e.target.classList.contains("grab")) return;
+    e.preventDefault();
+    touched = Date.now();
+    tune(f + (e.deltaY > 0 ? -0.1 : 0.1));
+  }, { passive: false });
+  draw();
+  let seen = false;
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    new IntersectionObserver(([en]) => { seen = en.isIntersecting; }).observe(xr);
+    // Untouched: glide to the next station every few seconds.
+    let target = null;
+    setInterval(() => {
+      if (!seen || drag || Date.now() - touched < 6000) { target = null; return; }
+      if (target == null) { const i = ST.findIndex((s) => s[0] > f + 0.05); target = (ST[i] ?? ST[0])[0]; }
+      if (Math.abs(f - target) < 0.05) { if (!xr._rest) xr._rest = Date.now(); if (Date.now() - xr._rest > 2200) { xr._rest = 0; target = null; } return; }
+      tune(f + (target > f ? 0.1 : -0.1) * (Math.abs(target - f) > 3 ? 4 : 1));
+    }, 70);
+  }
+}
+
+/* Prayer Checklist: this month with rings of five; tick today's prayers */
+const xc = $("#xc");
+if (xc) {
+  const MON = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const now = new Date(), y = now.getFullYear(), m = now.getMonth(), td = now.getDate(), days = new Date(y, m + 1, 0).getDate();
+  // Sample days before today (the same every visit); today starts with the prayers already due in Dhaka.
+  const log = {};
+  for (let d = 1; d < td; d++) { const k = (d * 7 + m * 3) % 11; log[d] = PRAYERS.map((p) => p[0]).slice(0, k < 4 ? 5 : k < 7 ? 4 : k < 9 ? 3 : k < 10 ? 2 : 0); }
+  const dt = dayTimes(Date.now(), 0);
+  log[td] = PRAYERS.map((p) => p[0]).filter((id) => dt[id] < Date.now()).slice(0, 1);
+  const tone = (n) => (n >= 5 ? "t-full" : n >= 3 ? "t-most" : n >= 1 ? "t-some" : "");
+  const ring = (done) => { const r = 15.2, c = 2 * Math.PI * r, seg = c * (60 / 360); return `<svg viewBox="0 0 34 34">${PRAYERS.map(([id], i) => `<circle cx="17" cy="17" r="${r}" class="${done.includes(id) ? "on" : ""}" stroke-dasharray="${seg.toFixed(2)} ${c.toFixed(2)}" transform="rotate(${-90 + i * 72 + 6} 17 17)"/>`).join("")}</svg>`; };
+  let hijri = "";
+  try { const f = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", { month: "long", year: "numeric" }); const a = f.format(new Date(y, m, 1, 12)), b = f.format(new Date(y, m, days, 12)); hijri = a === b ? a : `${a.replace(/ \d+ AH$/, "")} – ${b}`; } catch { /* old browser */ }
+  const draw = () => {
+    const done = log[td], n = done.length;
+    let month = 0, streak = 0;
+    for (let d = 1; d <= td; d++) month += log[d].length;
+    for (let d = n >= 5 ? td : td - 1; d >= 1 && log[d].length >= 5; d--) streak++;
+    const blanks = new Date(y, m, 1).getDay();
+    xc.innerHTML = `<div class="xc-p xc-cal"><div class="xc-head"><span class="xc-month"><b>${MON[m]}</b> ${y}<small>${hijri}</small></span><span class="xc-nav"><i>‹</i><i>›</i></span></div>
+      <div class="xc-grid">${["S", "M", "T", "W", "T", "F", "S"].map((w) => `<span class="xc-wd">${w}</span>`).join("")}${"<span></span>".repeat(blanks)}${Array.from({ length: days }, (_, i) => { const d = i + 1, l = d <= td ? log[d] : []; return `<span class="xc-day ${tone(l.length)}${d === td ? " today" : ""}${d > td ? " future" : ""}">${ring(l)}<span>${d}</span></span>`; }).join("")}</div></div>
+      <div class="xc-p xc-today"><div class="xc-top"><span class="xc-k">Today</span><span class="xc-date">${td} ${MON[m].slice(0, 3)}</span><span class="xc-count"><b>${n}</b>/5</span></div>
+        <div class="xc-bar ${tone(n)}"><i style="width:${n * 20}%"></i></div>
+        <div class="xc-list">${PRAYERS.map(([id, name, ar]) => `<div class="xc-row${done.includes(id) ? " on" : ""}" data-id="${id}"><span class="xc-check">${done.includes(id) ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>' : ""}</span><b>${name}</b><span class="xar" dir="rtl">${ar}</span><span class="xc-time">${dhakaHM(dt[id])}</span></div>`).join("")}</div>
+        <div class="xc-foot"><span>${MON[m].slice(0, 3)} <b>${month}</b>/${td * 5}</span><span>🔥 <b>${streak}</b> ${streak === 1 ? "day" : "days"}</span></div></div>`;
+  };
+  xc.addEventListener("click", (e) => {
+    const row = e.target.closest(".xc-row");
+    if (!row) return;
+    const id = row.dataset.id, l = log[td];
+    log[td] = l.includes(id) ? l.filter((x) => x !== id) : PRAYERS.map((p) => p[0]).filter((x) => x === id || l.includes(x));
+    draw();
+  });
+  draw();
 }
 
 /* ───────── Reveal on scroll ───────── */

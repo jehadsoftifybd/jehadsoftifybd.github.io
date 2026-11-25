@@ -1173,3 +1173,170 @@ kbd { display: inline-block; min-width: 1.6em; padding: 2px 8px; border-radius: 
   .isl[data-state="rec"] { --w: 270px; }
   .isl-body { padding: 14px; }
 }
+
+/* ───────── What's new: the new desktop widgets (mini versions of the real ones) ───────── */
+.nw-sub { margin: 56px 0 18px; text-align: center; }
+.nw-sub h3 { font-size: 1.5rem; }
+.nw-sub p { color: var(--muted); margin-top: 6px; }
+.nw-fit { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(var(--s, 1)); transform-origin: center; }
+.xp-fit { --s: .86; } .xt-fit { --s: .78; } .xr-fit { --s: .84; } .xc-fit { --s: .72; }
+.xar { font-family: "Sakkal Majalla", "Traditional Arabic", "Amiri", "Noto Naskh Arabic", "Geeza Pro", serif; font-weight: 400; }
+@property --p1 { syntax: "<color>"; inherits: true; initial-value: #000000; }
+@property --p2 { syntax: "<color>"; inherits: true; initial-value: #000000; }
+@property --p3 { syntax: "<color>"; inherits: true; initial-value: #000000; }
+@property --ta { syntax: "<color>"; inherits: true; initial-value: #2fbf8f; }
+
+/* Prayer Time */
+.xp { position: relative; width: 482px; height: 312px; border-radius: 30px; overflow: hidden; color: #fff; padding: 17px 19px 19px; display: flex; flex-direction: column; isolation: isolate;
+  background: #0b0b0f; box-shadow: 0 20px 50px -20px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.14); transition: --p1 1.4s, --p2 1.4s, --p3 1.4s; font-family: "Segoe UI Variable Display", "Segoe UI", var(--font); }
+.xp-bg { position: absolute; inset: 0; z-index: -1; background: radial-gradient(62% 78% at 102% -4%, var(--p1), transparent 72%), radial-gradient(70% 86% at 84% 108%, var(--p2), transparent 72%), linear-gradient(116deg, #0b0b0f 0%, #0b0b0f 36%, var(--p3) 100%); }
+.xp-band { position: absolute; left: 30%; top: 46%; width: 120%; height: 74px; transform: rotate(-31deg); filter: blur(20px); opacity: .75; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--p2) 80%, transparent) 35%, color-mix(in srgb, var(--p1) 85%, transparent) 70%, transparent); }
+.xp-stars { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s; background: radial-gradient(1.2px 1.2px at 62% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 74% 9%, #fff 50%, transparent 51%), radial-gradient(1.4px 1.4px at 88% 26%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 55% 34%, #fff 50%, transparent 51%), radial-gradient(1.1px 1.1px at 95% 12%, #fff 50%, transparent 51%), radial-gradient(1.3px 1.3px at 47% 12%, #fff 50%, transparent 51%); }
+.xp[data-p="night"] .xp-stars { opacity: .85; } .xp[data-p="fajr"] .xp-stars { opacity: .4; }
+.xp-top { display: flex; justify-content: space-between; align-items: center; }
+.xp-loc { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px 0 10px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); font-size: 13.5px; }
+.xp-loc svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; }
+.xp-loc span { color: rgba(255,255,255,.62); }
+.xp-hij { font-size: 13px; color: rgba(255,255,255,.78); }
+.xp-main { flex: 1; display: flex; align-items: center; justify-content: space-between; }
+.xp-k { font-size: 11px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; color: rgba(255,255,255,.62); }
+.xp-name { display: flex; align-items: baseline; gap: 12px; margin-top: 5px; }
+.xp-name b { font-size: 31px; font-weight: 700; line-height: 1.05; }
+.xp-name .xar { font-size: 22px; color: rgba(255,255,255,.62); }
+.xp-count { margin-top: 4px; font-size: 52px; font-weight: 300; line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: -.015em; }
+.xp-sub { margin-top: 3px; font-size: 12.5px; color: rgba(255,255,255,.62); }
+.xp-ring { position: relative; width: 132px; height: 132px; flex: none; }
+.xp-ring > svg { position: absolute; inset: 0; }
+.xp-ring .g { fill: rgba(255,255,255,.07); stroke: rgba(255,255,255,.22); }
+.xp-ring .t { fill: none; stroke: rgba(255,255,255,.2); stroke-width: 4; }
+.xp-ring .a { fill: none; stroke: #fff; stroke-width: 4; stroke-linecap: round; transition: stroke-dasharray .6s; filter: drop-shadow(0 0 4px rgba(255,255,255,.5)); }
+.xp-ring .c { fill: rgba(255,255,255,.1); stroke: rgba(255,255,255,.16); }
+.xp-in { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 13.5px; font-weight: 600; }
+.xp-in svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.xp-chips { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+.xp-chip { position: relative; height: 64px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); backdrop-filter: blur(14px); transition: background .5s, border-color .5s, opacity .5s; }
+.xp-chip span { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.62); }
+.xp-chip b { font-size: 15.5px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.xp-chip.past { opacity: .55; }
+.xp-chip.cur { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.62); }
+.xp-chip.cur span, .xp-chip.next span { color: #fff; }
+.xp-chip.next { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.24); }
+.xp-chip.next::after { content: ""; position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px color-mix(in srgb, var(--p2) 70%, transparent), 0 0 8px rgba(255,255,255,.8); }
+
+/* Tasbih Counter */
+.xt { position: relative; width: 356px; height: 356px; border-radius: 30px; overflow: hidden; color: #fff; padding: 16px 18px; display: flex; flex-direction: column; isolation: isolate;
+  background: #0d1110; box-shadow: 0 20px 50px -20px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.1); transition: --ta .8s; font-family: "Segoe UI Variable Display", "Segoe UI", var(--font); }
+.xt::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(95% 70% at 50% -8%, color-mix(in srgb, var(--ta) 28%, transparent), transparent 70%), radial-gradient(70% 45% at 50% 108%, color-mix(in srgb, var(--ta) 14%, transparent), transparent 72%); }
+.xt-top { display: flex; justify-content: space-between; align-items: center; height: 26px; }
+.xt-steps { display: flex; gap: 6px; padding-left: 4px; }
+.xt-steps i { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.17); transition: width .3s, background .3s; }
+.xt-steps i.past { background: var(--c); }
+.xt-steps i.now { width: 20px; background: var(--ta); }
+.xt-today { font-size: 12px; color: rgba(255,255,255,.58); font-variant-numeric: tabular-nums; }
+.xt-tap { position: relative; align-self: center; width: 236px; height: 236px; margin-top: 2px; border-radius: 50%; cursor: pointer; }
+.xt-tap > svg { position: absolute; inset: 0; }
+.xt-star rect { fill: none; stroke: var(--ta); stroke-opacity: .16; stroke-width: 1.2; }
+.xt-track { fill: none; stroke: rgba(255,255,255,.11); stroke-width: 2; }
+.xt-prog { fill: none; stroke: var(--ta); stroke-width: 2.6; stroke-linecap: round; transition: stroke-dasharray .25s; }
+.xt-bead { fill: rgba(255,255,255,.17); transition: fill .2s; }
+.xt-bead.on { fill: var(--ta); }
+.xt-bead.cur { filter: drop-shadow(0 0 5px var(--ta)); }
+.xt.complete .xt-prog { stroke-width: 3.6; filter: drop-shadow(0 0 6px var(--ta)); }
+.xt-mid { position: absolute; inset: 36px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  background: radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--ta) 15%, transparent), transparent 72%); transition: transform .08s; }
+.xt-tap:hover .xt-mid { background: radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--ta) 24%, transparent), transparent 72%); }
+.xt-tap:active .xt-mid { transform: scale(.96); }
+.xt-mid .xar { font-size: 27px; line-height: 1.15; text-align: center; }
+.xt-n { font-size: 44px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.xt-n svg { width: 40px; height: 40px; fill: none; stroke: var(--ta); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.xt-of { font-size: 11.5px; color: rgba(255,255,255,.58); }
+.xt-txt { margin-top: auto; text-align: center; }
+.xt-txt b { display: block; font-size: 15px; }
+.xt-txt span { font-size: 11.5px; font-style: italic; color: rgba(255,255,255,.58); }
+
+/* Radio */
+.xr { position: relative; width: 482px; height: 332px; border-radius: 30px; overflow: hidden; color: #fff; background: #000; box-shadow: 0 20px 50px -20px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.1);
+  font-family: "Segoe UI Variable Display", "Segoe UI", var(--font); user-select: none; -webkit-user-select: none; }
+.xr > svg { position: absolute; inset: 0; }
+.xr .grab { fill: transparent; cursor: ns-resize; touch-action: none; }
+.xr .hi { fill: #8e5cf6; }
+.xr .lo { fill: #cbb8ff; }
+.xr .tk { stroke: #3a3e47; stroke-width: 2; stroke-linecap: round; }
+.xr .tk.s { stroke: #2a2d34; stroke-width: 1.6; }
+.xr .mk { stroke: #8e5cf6; stroke-width: 2.6; stroke-linecap: round; }
+.xr .mk.now { stroke: #fff; }
+.xr .num { fill: #4d525d; font-size: 13px; font-weight: 500; }
+.xr .num.near { fill: #fff; font-size: 14px; }
+.xr .ptr { fill: #fff; }
+.xr .pl { stroke: #8e5cf6; stroke-width: 2.4; stroke-linecap: round; }
+.xr .unit { fill: #8b8f98; font-size: 7px; font-weight: 600; }
+.xr-top { position: absolute; top: 22px; right: 26px; display: flex; align-items: center; gap: 14px; }
+.xr-rec { position: relative; height: 24px; padding: 0 9px; display: flex; align-items: center; border-radius: 6px; border: 1px solid rgba(255,255,255,.18); font-size: 13px; font-weight: 600; }
+.xr-rec i { position: absolute; top: 3px; right: 3px; width: 7px; height: 7px; border-radius: 50%; background: #ff2d2d; box-shadow: 0 0 6px rgba(255,45,45,.8); }
+.xr-clock { display: flex; align-items: center; gap: 7px; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.xr-clock i { width: 13px; height: 13px; box-sizing: border-box; border-radius: 50%; border: 2.6px solid #5d6270; }
+.xr.on .xr-clock i { border-color: #8e5cf6; box-shadow: 0 0 8px rgba(142,92,246,.6); }
+.xr-info { position: absolute; left: 232px; top: 92px; display: flex; flex-direction: column; align-items: flex-start; }
+.xr-head { display: flex; align-items: flex-start; gap: 8px; padding-left: 4px; }
+.xr-head b { font-size: 25px; font-weight: 500; color: #8b8f98; white-space: nowrap; }
+.xr-name { max-width: 104px; margin-top: 3px; font-size: 8.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #8b8f98; line-height: 1.3; }
+.xr-freq { margin-top: 8px; height: 62px; padding: 0 22px 2px; display: flex; align-items: center; border-radius: 31px; background: #1d2026; font-size: 52px; font-weight: 500; font-variant-numeric: tabular-nums; color: rgba(255,255,255,.55); cursor: pointer; transition: color .2s, box-shadow .2s; }
+.xr-freq .pad { color: #8b8f98; opacity: .8; }
+.xr.on .xr-freq { color: #fff; box-shadow: 0 0 0 1px rgba(142,92,246,.45); }
+.xr-bands { display: flex; gap: 14px; margin-top: 12px; padding-left: 4px; font-size: 26px; font-weight: 600; color: #5d6270; }
+.xr-bands .on { color: #8e5cf6; }
+
+/* Prayer Checklist */
+.xc { position: relative; width: 640px; height: 384px; border-radius: 30px; overflow: hidden; color: #fff; padding: 12px; display: grid; grid-template-columns: 1.12fr 1fr; gap: 12px; isolation: isolate;
+  background: #0b0b0f; box-shadow: 0 20px 50px -20px rgba(0,0,0,.8); font-family: "Segoe UI Variable Display", "Segoe UI", var(--font); }
+.xc::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(52% 70% at 98% 4%, #ff8a1f, transparent 72%), radial-gradient(58% 70% at 62% 104%, #e8264f, transparent 72%), linear-gradient(118deg, #0b0b0f 0%, #0b0b0f 34%, #5c0f22 100%); }
+.xc-p { min-width: 0; border-radius: 22px; background: rgba(16,16,20,.5); border: 1px solid rgba(255,255,255,.13); backdrop-filter: blur(18px) saturate(1.4); }
+.xc-cal { padding: 13px 13px 8px 15px; }
+.xc-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.xc-month { font-size: 22px; font-weight: 300; line-height: 1.1; white-space: nowrap; }
+.xc-month b { font-weight: 700; }
+.xc-month small { display: block; margin-top: 3px; font-size: 12.5px; color: rgba(255,255,255,.6); }
+.xc-nav { display: flex; gap: 6px; }
+.xc-nav i { width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.08); display: grid; place-items: center; font-style: normal; font-size: 13px; }
+.xc-nav i + i { opacity: .35; }
+.xc-grid { margin-top: 9px; display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; justify-items: center; }
+.xc-wd { height: 17px; font-size: 11px; font-weight: 600; color: rgba(255,255,255,.6); }
+.xc-day { position: relative; width: 36px; height: 36px; display: grid; place-items: center; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.xc-day svg { position: absolute; inset: 1px; }
+.xc-day span { position: relative; }
+.xc-day.today::before { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: rgba(255,255,255,.2); }
+.xc-day.future { opacity: .28; }
+.xc-day circle { fill: none; stroke: rgba(255,255,255,.15); stroke-width: 2.6; stroke-linecap: round; transition: stroke .3s; }
+.xc-day circle.on { stroke: var(--tone); }
+.t-full { --tone: #34d07f; }
+.t-most { --tone: #3ea2ff; }
+.t-some { --tone: #ffb21f; }
+.xc-today { padding: 14px 13px 11px; display: flex; flex-direction: column; }
+.xc-top { display: grid; grid-template-columns: 1fr auto; align-items: end; padding: 0 3px; }
+.xc-k { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+.xc-date { grid-row: 2; margin-top: 3px; font-size: 19px; font-weight: 500; }
+.xc-count { grid-column: 2; grid-row: 1 / span 2; font-size: 17px; color: rgba(255,255,255,.6); line-height: 1; }
+.xc-count b { font-size: 44px; font-weight: 700; color: #fff; }
+.xc-bar { margin: 10px 3px 0; height: 5px; border-radius: 3px; background: rgba(255,255,255,.15); overflow: hidden; }
+.xc-bar i { display: block; height: 100%; background: var(--tone, transparent); transition: width .4s; }
+.xc-list { margin-top: 9px; flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.xc-row { display: grid; grid-template-columns: 28px auto 1fr auto; align-items: center; gap: 8px; height: 40px; padding: 0 10px 0 6px; border-radius: 12px; cursor: pointer; transition: background .15s; }
+.xc-row:hover { background: rgba(255,255,255,.08); }
+.xc-row.on { background: rgba(255,255,255,.12); }
+.xc-row b { font-size: 16px; font-weight: 600; }
+.xc-row .xar { font-size: 15px; color: rgba(255,255,255,.6); }
+.xc-time { justify-self: end; font-size: 15px; font-variant-numeric: tabular-nums; color: rgba(255,255,255,.6); }
+.xc-check { width: 24px; height: 24px; box-sizing: border-box; border-radius: 50%; border: 2px solid rgba(255,255,255,.5); display: grid; place-items: center; justify-self: center; }
+.xc-row.on .xc-check { border: 0; background: linear-gradient(180deg, #3fe08e, #1fb46a); }
+.xc-check svg { width: 14px; height: 14px; fill: none; stroke: #fff; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+.xc-foot { display: flex; justify-content: space-between; padding: 3px 5px 0; font-size: 13px; color: rgba(255,255,255,.6); }
+.xc-foot b { color: #fff; }
+
+@media (max-width: 640px) {
+  .nw-sub { margin-top: 40px; }
+  .xp-fit { --s: .64; } .xt-fit { --s: .74; } .xr-fit { --s: .64; } .xc-fit { --s: .5; }
+}
+@media (max-width: 400px) {
+  .xp-fit, .xr-fit { --s: .58; } .xc-fit { --s: .46; } .xt-fit { --s: .7; }
+}
